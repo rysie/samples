@@ -1,0 +1,258 @@
+/* 
+    Created on : 2014-02-01, 17:09:39
+    Author     : Rysie
+*/
+
+@import "anim-mixins";
+
+// Vars
+
+$imgPath: "/images";
+
+$siteLarge: 1000px;
+$siteMedium: 700px;
+$siteSmall: 450px;
+
+$shipWidth: 55px;
+$shipHeight: 50px;
+$shipMargin: 15px;    
+
+$shipWidthM: 35px;
+$shipHeightM: 30px;
+$shipMarginM: 7px;  
+
+$shipWidthS: 25px;
+$shipHeightS: 20px;
+$shipMarginS: 3px;  
+
+// Animations 
+
+@include keyframes(background-move) {
+    0% { background-position: 0px 0px; }
+    100% { background-position: 0px -350px; } 
+}
+
+@include keyframes(background-moveM) {
+    0% { background-position: 0px 0px; }
+    100% { background-position: 0px -250px; } 
+}
+
+@include keyframes(background-moveS) {
+    0% { background-position: 0px 0px; }
+    100% { background-position: 0px -150px; } 
+}
+
+@include keyframes(ship-anim) {
+    0% { background-position: 0 0; }
+    100% { background-position: ($shipWidth*2)+1 0px; }
+}
+
+@include keyframes(ship-animM) {
+    0% { background-position: 0 0; }
+    100% { background-position: ($shipWidthM*2)+1 0px; }
+}
+
+@include keyframes(ship-animS) {
+    0% { background-position: 0 0; }
+    100% { background-position: ($shipWidthS*2)+1 0px; }
+}
+
+@include keyframes(all-ships-anim) {
+    0% { margin-left: 0%; }
+    33% { margin-left: -18%; }
+    66% { margin-left: 0%; }
+    100% { margin-left: 18%; }
+}
+
+// Styles
+
+
+.spaceInvaders {
+    position: relative;
+    width: 100%;
+    height: $siteLarge * 0.75;
+    text-align: center;
+    background: black;
+    overflow: hidden;
+
+    @media (max-width: $siteMedium) {
+        height: $siteMedium * 0.75;
+    }
+    
+    @media (max-width: $siteSmall) {
+        height: $siteSmall * 0.75;
+    }    
+    
+    .bg_layer_1 {
+        position: absolute;
+        width: 100%;
+        height: $siteLarge * 0.75;
+        background: url("#{$imgPath}/stars_1.png");
+        background-size: 350px;
+        
+        @include animation("background-move 8s infinite linear");
+
+        @media (max-width: $siteMedium) { 
+            background-size: 250px; 
+            height: $siteMedium * 0.75;
+            @include animation("background-moveM 8s infinite linear");
+        }
+        @media (max-width: $siteSmall) { 
+            background-size: 150px; 
+            height: $siteSmall * 0.75;
+            @include animation("background-moveS 8s infinite linear");
+        }         
+    }
+
+    .bg_layer_2 {
+        position: absolute;
+        width: 100%;
+        height: $siteLarge * 0.75;        
+        background: url("#{$imgPath}/stars_2.png");
+        background-size: 350px;
+        
+        @include animation("background-move 5s infinite linear");
+
+        @media (max-width: $siteMedium) { 
+            background-size: 250px; 
+            height: $siteMedium * 0.75;
+            @include animation("background-moveM 5s infinite linear");
+        }        
+        @media (max-width: $siteSmall) { 
+            background-size: 150px; 
+            height: $siteSmall * 0.75;
+            @include animation("background-moveS 5s infinite linear");
+        } 
+
+    }    
+
+
+
+
+    .spaceShips {
+        margin-top: 15px;
+        text-align: left;
+        display: inline-block;
+        @include animation("all-ships-anim 15s infinite alternate steps(20)");
+
+        .ship {
+            width: $shipWidth;
+            height: $shipHeight;
+            margin-right: $shipMargin;
+            @include animation("ship-anim 1s infinite steps(2)");
+            @media (max-width: $siteMedium) {
+                width: $shipWidthM;
+                height: $shipHeightM;
+                margin-right: $shipMarginM;
+                @include animation("ship-animM 1s infinite steps(2)");
+            }
+            @media (max-width: $siteSmall) {
+                width: $shipWidthS;
+                height: $shipHeightS;
+                margin-right: $shipMarginS;
+                @include animation("ship-animS 1s infinite steps(2)");
+            }            
+            display: block;
+            float: left;
+            background-position: 0 0;
+        }
+
+        .row {
+            overflow: hidden;
+            &:after  {
+                content: '';
+                display: block;
+                clear: both; }
+        }
+
+
+        .row_1,
+        .row_2,
+        .row_3 {
+            width: 10 * ($shipWidth + $shipMargin);
+            .ship  {
+                background-image: url("#{$imgPath}/ship_1.png");    
+                background-size: $shipWidth*2+10 $shipHeight;
+            }
+
+            @media (max-width: $siteMedium) {
+                width: 10 * ($shipWidthM + $shipMarginM);
+                .ship {
+                    background-size: $shipWidthM*2+10 $shipHeightM;
+                }
+            }
+            @media (max-width: $siteSmall) {
+                width: 10 * ($shipWidthS + $shipMarginS);
+                background-size: $shipWidthS*2+10 $shipHeightS;
+                .ship {
+                    background-size: $shipWidthS*2+10 $shipHeightS;
+                }
+            }
+        }
+
+        .row_4 {
+            width: 8 * ($shipWidth + $shipMargin);
+            margin-left: 1 * ($shipWidth + $shipMargin);
+            .ship {
+                background-image: url("#{$imgPath}/ship_2.png"); 
+                background-size: $shipWidth*2+10 $shipHeight;
+            }
+
+            @media (max-width: $siteMedium) {
+                width: 10 * ($shipWidthM + $shipMarginM);
+                margin-left: 1 * ($shipWidthM + $shipMarginM);
+                .ship {
+                    background-size: $shipWidthM*2+10 $shipHeightM;
+                }
+            }
+
+            @media (max-width: $siteSmall) {
+                width: 10 * ($shipWidthS + $shipMarginS);
+                margin-left: 1 * ($shipWidthS + $shipMarginS);
+                .ship {
+                    background-size: $shipWidthS*2+10 $shipHeightS;
+                }
+            }             
+
+        }
+
+        .row_5 {
+            margin-left: 2 * ($shipWidth + $shipMargin);
+            width: 6 * ($shipWidth + $shipMargin);
+            .ship {
+                background-image: url("#{$imgPath}/ship_3.png"); 
+                background-size: $shipWidth*2+10 $shipHeight;
+            }
+
+            @media (max-width: $siteMedium) {
+                width: 6 * ($shipWidthM + $shipMarginM);
+                margin-left: 2 * ($shipWidthM + $shipMarginM);
+                .ship {
+                    background-size: $shipWidthM*2+10 $shipHeightM;
+                }
+            }
+
+            @media (max-width: $siteSmall) {
+                width: 6 * ($shipWidthS + $shipMarginS);
+                margin-left: 2 * ($shipWidthS + $shipMarginS);
+                .ship {
+                    background-size: $shipWidthS*2+10 $shipHeightS;
+                }
+            }
+
+        }
+    }
+
+    .gameOver {
+        position: absolute;
+        width: 100%;
+        top: 40%;
+        left: 0;
+        img {
+            margin: 0 auto;
+            width: 50%;
+            display: block;
+        }
+    }
+
+}

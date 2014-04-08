@@ -1,0 +1,168 @@
+/* 
+    Created on : 2014-02-02, 15:53:03
+    Author     : Rysie
+*/
+
+@import "anim-mixins";
+
+// Vars
+
+$imgPath: "/images";
+
+$siteLarge: 1000px;
+$siteMedium: 700px;
+$siteSmall: 450px;
+
+
+// Animations
+@include keyframes(pupil) {
+    from { opacity: 0; }
+    to { opacity: 1; } 
+}
+
+@include keyframes(eyelidL) {
+    from { margin-top: -2200px; }
+    to { margin-top: -1700px; } 
+}
+
+@include keyframes(eyelidM) {
+    from { margin-top: -1600px; }
+    to { margin-top: -1200px; } 
+}
+
+@include keyframes(eyelidS) {
+    from { margin-top: -1100px; }
+    to { margin-top: -750px; } 
+}
+
+
+.eye_container {
+    width: 100%;
+    background: #efefef;
+    height: $siteLarge * 0.35;
+
+    @media (max-width: $siteMedium) {
+        height: $siteMedium * 0.35;
+    }
+
+    @media (max-width: $siteSmall) {
+        height: $siteSmall * 0.35;
+    }   
+}
+
+.watching_you {
+    height: 100px;
+    margin: 2em auto 0 auto;
+    width: $siteLarge * 0.75;
+
+    @media (max-width: $siteMedium) {
+        width: $siteMedium * 0.75;
+    }
+
+    @media (max-width: $siteSmall) {
+        width: $siteSmall * 0.75;
+    }    
+
+    .error {
+        margin-bottom: 1em;
+    }
+
+    img.block {
+        display: block;
+        margin: 0 auto;
+        width: 75%;
+    }
+
+    .eye {
+        position: relative;
+        .pupil {
+            position: absolute;
+            z-index: 50;
+            top: 0;
+            left: 0;
+            width: 100%;
+            img {
+                width: 75%;
+                @include animation("pupil 0.5s linear 2s forwards");
+                opacity: 0;
+                margin: 0 auto;
+            }
+        }
+
+        .eyelid {
+            position: absolute;
+            overflow: hidden;
+            width: $siteLarge * 0.75;
+            height: $siteLarge * 0.35;
+
+            @media (max-width: $siteMedium) {
+                width: $siteMedium * 0.75;
+                height: $siteMedium * 0.40;                
+            }
+            @media (max-width: $siteSmall) {
+                width: $siteSmall * 0.75;
+                height: $siteSmall * 0.45;                
+            }            
+
+            z-index: 100;
+
+            .eyelash {
+                background: url("#{$imgPath}/eyelash.png") bottom center no-repeat;
+                width: $siteLarge * 0.75;
+                height: $siteLarge * 0.25;
+                margin-top: -$siteLarge * 0.15;
+                background-size: $siteLarge * 0.5;
+
+                @media (max-width: $siteMedium) {
+                    width: $siteMedium * 0.75;
+                    height: $siteMedium * 0.25;
+                    margin-top: -$siteMedium * 0.15;
+                    background-size: $siteMedium * 0.5;
+                }
+                
+                @media (max-width: $siteSmall) {
+                    width: $siteSmall * 0.75;
+                    height: $siteSmall * 0.25;
+                    margin-top: -$siteSmall * 0.15;
+                    background-size: $siteSmall * 0.5;
+                }                
+            }
+            .circle {
+                background: #EFEFEF;
+                margin-top: -$siteLarge * 2.2;
+                margin-left: -$siteLarge * 0.628;
+                width: $siteLarge * 2;
+                height: $siteLarge * 2;
+                border-radius: $siteLarge;
+                @include animation("eyelidL 0.4s ease 3s 4 alternate");
+
+                @media (max-width: $siteMedium) {
+                    margin-top: -$siteMedium * 2.2;
+                    margin-left: -$siteMedium * 0.628;
+                    width: $siteMedium * 2;
+                    height: $siteMedium * 2;
+                    border-radius: $siteMedium;
+                    @include animation("eyelidM 0.4s ease 3s 4 alternate");
+                }
+
+                @media (max-width: $siteSmall) {
+                    margin-top: -$siteSmall * 2.2;
+                    margin-left: -$siteSmall * 0.628;
+                    width: $siteSmall * 2;
+                    height: $siteSmall * 2;
+                    border-radius: $siteSmall;
+                    @include animation("eyelidS 0.4s ease 3s 4 alternate");
+                }                
+            }
+        }
+    }
+
+    .note {
+        @include animation("pupil 0.5s linear 3s forwards");
+        opacity: 0;
+        margin: 40px auto 0 auto;
+        font-family: 'Bad Script',cursive;
+        font-size: 2rem;
+        text-align: center;
+    }
+}
