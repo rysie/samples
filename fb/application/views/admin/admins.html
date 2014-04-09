@@ -1,0 +1,140 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+
+    <tal:block metal:fill-slot="sidebar" >
+        <div class="bg normal">
+            <ul>
+                <li>Ze względów bezpieczeństwa hasło musi mieć co najmniej 5 znaków i nie może być podobne do loginu.</li>
+                <li>Imię i nazwisko użytkownika służy wyłącznie do łatwej identyfikacji (nie jest pokazywane na stronie głównej).</li>
+                <li>Raz wprowadzonego hasła nie da się odkodować - jest ono zaszyfrowane. Jedyną możliwością jest jego zmiana przez innego administratora.</li>
+            </ul>
+            <h3 tal:condition="exists: admin"><a href="/${subpath}admin/admins">Powróć do listy &raquo;</a></h3>
+            <h3 tal:condition="exists: adminList"><a href="/${subpath}admin/admins/addAdmin">Utwórz nowego &raquo;</a></h3>
+        </div>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+
+        <!--
+               Wszyscy użytkownicy
+        -->
+
+        <tal:block tal:condition="exists: adminList">
+            <h1>Lista administratorów systemu</h1>
+            <table class="auto total">
+                <tr>
+                    <th style="width: 120px;">login</th>
+                    <th style="width: 70px;">email</th>
+                    <th style="width: 60px;">&nbsp;</th>
+                </tr>
+                <tr tal:repeat="admin adminList">
+                    <td><a href="/${subpath}admin/admins/edit/${admin/id_admins}">${admin/login}</a></td>
+                    <td><a href="/${subpath}admin/admins/edit/${admin/id_admins}">${admin/email}</a></td>
+                    <td class="data">
+                        <a href="/${subpath}admin/admins/edit/${admin/id_admins}">edycja &raquo;</a><br/><br/>
+                        <a class="deleteItem" href="/${subpath}admin/admins/delete/${admin/id_admins}" rel="${admin/id_admins}">usuń &raquo;</a>
+                    </td>
+                </tr>
+            </table>
+        </tal:block>
+
+        <!--
+            Jeden użytkownik: edycja
+        -->
+
+        <tal:block tal:condition="exists: admin">
+            <h1>Użytkownicy: edycja</h1>
+            <form id="update" action="/${subpath}admin/admins/update/${admin/id_admins}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="id_admins" id="id_admins" value="${admin/id_admins}"/>
+                <input type="hidden" name="old_password" id="old_password" value="${admin/password}"/>
+                <input type="hidden" name="old_login" id="old_login" value="${admin/login}"/>
+
+                <h2>${admin/login}</h2>
+                <div style="height: 12px;" />
+                <input type="checkbox" name="receive_messages" tal:attributes="checked php: admin['receive_messages']? 'checked': null" />&nbsp;otrzyma maile z zamówieniami
+                <h3>Login</h3>
+                <input type="text" name="login" id="login" tal:attributes="value admin/login" />
+                <h3>E-mail</h3>
+                <input type="text" name="email" id="email" tal:attributes="value admin/email" />
+                <div class="status" />
+                <table>
+                    <tr><td>
+                            <h3>Hasło</h3>
+                            <input style="width: 250px;" type="password" id="password" name="password" />
+                            <div class="status" />
+                        </td>
+                        <td style="padding-left: 20px;">
+                            <div>Siła hasła:</div>
+                            <div class="password-meter">
+                                <div class="password-meter-message">&nbsp;</div>
+                                <div class="password-meter-bg">
+                                    <div class="password-meter-bar"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Powtórz hasło</h3>
+                            <input style="width: 250px;" type="password" id="password_confirm" name="password_confirm" />
+                            <div class="status" />
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="clear" />
+                <div id="buttons_OKCANCEL" />
+            </form>
+        </tal:block>
+
+
+        <!--
+            Nowy użytkownik: edycja
+        -->
+
+        <tal:block tal:condition="exists: addAdmin">
+            <h1>Użytkownicy: dodawanie</h1>
+            <form id="addAdmin" action="/${subpath}admin/admins/create" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="old_login" id="old_login" value=""/>
+
+                <div style="height: 12px;" />
+                <input type="checkbox" name="receive_messages" />&nbsp;otrzyma maile z zamówieniami
+                <h3>Login</h3>
+                <input type="text" name="login" id="login"/>
+                <div class="status" />
+                <h3>E-mail</h3>
+                <input type="text" name="email" id="email" />
+                <div class="status" />
+                <table>
+                    <tr><td>
+                            <h3>Hasło</h3>
+                            <input style="width: 250px;" type="password" id="password" name="password" />
+                            <div class="status" />
+                        </td>
+                        <td style="padding-left: 20px;">
+                            <div>Siła hasła:</div>
+                            <div class="password-meter">
+                                <div class="password-meter-message">&nbsp;</div>
+                                <div class="password-meter-bg">
+                                    <div class="password-meter-bar"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Powtórz hasło</h3>
+                            <input style="width: 250px;" type="password" id="password_confirm" name="password_confirm" />
+                            <div class="status" />
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="clear" />
+                <div id="buttons_OKCANCEL" />
+            </form>
+        </tal:block>
+
+    </tal:block>
+</tal:block>

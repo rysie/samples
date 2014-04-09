@@ -1,0 +1,106 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+            <input type="hidden" id="today" tal:attributes="value php: date('Y-m-d');" />
+            <div tal:condition="exists: years" id="years">
+                <h3>Rok:</h3>
+                <ul>
+                    <li tal:repeat="year years"><a href="/${subpath}admin/news/index/${year}">${year}</a></li>
+                </ul>
+            </div>
+            <h3 tal:condition="exists: newsList"><a href="/${subpath}admin/news/create">Dodaj nowy wpis &raquo;</a></h3>
+            <h3 tal:condition="exists: news"><a href="/${subpath}admin/news">Powróć do listy &raquo;</a></h3>
+        </div>
+    </tal:block>
+
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <!--
+               Wszystkie newsy: lista
+        -->
+
+        <tal:block tal:condition="exists: newsList">
+            <h1>Lista aktualności w roku ${year}</h1>
+            <table class="auto total">
+                <tr>
+                    <th style="width: 75px;">data wpisu</th>
+                    <th style="width: 150px;">tytuł</th>
+                    <th style="width: 300px;">lead</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr tal:repeat="news newsList" tal:attributes="class php: news['enabled']? 'enabled': 'disabled'">
+                    <td class="data">${news/datetime}</td>
+                    <td><a href="/${subpath}admin/news/edit/${news/id}">${news/title}</a></td>
+                    <td tal:content="structure news/lead" />
+                    <td class="data">
+                        <a href="/${subpath}admin/news/edit/${news/id}">edycja</a><br/><br/>
+                        <a class="deleteItem" href="/${subpath}admin/news/delete/${news/id}">usuń wpis</a>
+                    </td>
+                </tr>
+            </table>
+        </tal:block>
+
+
+        <!--
+            Jeden news: edycja
+        -->
+
+        <tal:block tal:condition="exists: news">
+            <h1>Aktualności: edycja</h1>
+
+            <form id="update" action="/${subpath}admin/news/update/${news/id}" method="POST" enctype="multipart/form-data">
+                <h3>Tytuł</h3>
+                <input type="text" name="title" tal:attributes="value news/title" />
+                <h3>Data</h3>
+                <input type="text" id="datetime" name="datetime" tal:attributes="value news/datetime" readonly="readonly" />
+                <h3>Publikacja</h3>
+                <input type="checkbox" name="enabled" id="enabled" tal:attributes="checked php:news['enabled']? 'checked' : NULL"/>&nbsp; dopuszczony do publikacji
+                <h3>Lead</h3>
+                <textarea name="lead" id="lead" cols="" rows="" class="editor">${news/lead}</textarea>
+                <h3>Treść</h3>
+                <textarea name="content" id="content" cols="" rows="" class="editor">${news/content}</textarea>
+
+                <h3>Galeria</h3>
+                        <select name="id_gallery" id="id_gallery">
+                            <option value="0">-- nie przypisuj galerii --</option>
+                            <option tal:repeat="gallery galleries" value="${gallery/id}"
+                                    tal:attributes="selected php:gallery['id'] == news['id_gallery']? 'selected' : NULL">${gallery/title}</option>
+                        </select>
+
+                    <div class="clear" />
+                    <div id="buttons_OKCANCEL" />
+            </form>
+        </tal:block>
+
+
+        <!--
+            Jeden formularz: podgląd
+        -->
+
+        <tal:block id="metryczka" tal:condition="exists: viewNews">
+            <h1>Podgląd aktualności <span tal:content="viewNews/id" /></h1>
+            <h2 tal:content="viewNews/title" />
+            <div tal:content="viewNews/lead" />
+            <div tal:content="viewNews/content" />
+            <table class="auto">
+                <tr><td colspan="2" style="text-align: center;">
+                        <input type="hidden" id="id" name="id" tal:attributes="value viewNews/id" />
+                        <input class="btn" type="button" id="delete" value="USUŃ" />
+                        <input class="btn" type="button" id="edit" value="EDYTUJ" />
+                        <input class="btn" type="button" id="print" value="DRUKUJ" />
+                        <input class="btn" type="button" id="back" value="POWRÓT" />
+                    </td>
+                </tr>
+            </table>
+        </tal:block>
+
+
+
+    </tal:block>
+</tal:block>
+
+
+
+

@@ -1,0 +1,129 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+            <input type="hidden" id="today" tal:attributes="value php: date('Y-m-d');" />
+            <div tal:condition="exists: years" id="years">
+                <h3>Rok:</h3>
+                <ul>
+                    <li tal:repeat="year years"><a href="/${subpath}admin/form/zgloszenia/${year}">${year}</a></li>
+                </ul>
+            </div>
+            <h3 tal:condition="exists: form"><a href="/${subpath}admin/form/zgloszenia">Powróć do listy &raquo;</a></h3>
+        </div>
+    </tal:block>
+
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <!--
+               Wszystkie newsy: lista
+        -->
+
+        <tal:block tal:condition="exists: forms">
+            <h1>Lista zgłoszeń w roku ${year}</h1>
+            <table class="auto total">
+                <tr>
+                    <th style="width: 75px;">data wpisu</th>
+                    <th style="width: 150px;">zgłaszający</th>
+                    <th style="width: 150px;">szkolenie</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr tal:repeat="form forms">
+                    <td class="data">${form/datetime}</td>
+                    <td><a href="/${subpath}admin/form/view/zgloszenia/${form/id}">${form/kontakt_nazwa}</a></td>
+                    <td tal:content="form/title" />
+                    <td class="data">
+                        <a href="/${subpath}admin/form/view/zgloszenia/${form/id}">pokaż wpis</a><br/><br/>
+                        <a class="deleteItem" href="/${subpath}admin/form/delete/zgloszenia/${form/id}">usuń wpis</a>
+                    </td>
+                </tr>
+            </table>
+        </tal:block>
+
+
+        <!--
+            Jeden formularz: podgląd
+        -->
+
+        <tal:block id="metryczka" tal:condition="exists: form">
+            <h1>Metryczka zgłoszenia <span tal:content="form/id" /></h1>
+            <h2 tal:content="form/title" />
+            <table class="form_view">
+                <tr>
+                    <td class="zright">data zgłoszenia</td>
+                    <td class="zleft">${form/datetime}</td>
+                </tr>                
+                <tr>
+                    <td class="zright">szkolenie</td>
+                    <td class="zleft">${form/title}</td>
+                </tr>
+                <tr>
+                    <td class="zright">termin</td>
+                    <td class="zleft"><div tal:condition="php: form['termin']" tal:content="structure form/termin" /></td>
+                </tr>
+                <tr>
+                    <td class="zright">czas trwania</td>
+                    <td class="zleft"><div tal:condition="php: form['czas_trwania']">${form/czas_trwania}</div></td>
+                </tr>
+                <tr>
+                    <td class="zright">proponowany termin szkolenia</td>
+                    <td class="zleft"><div tal:condition="php: form['proponowany_termin_szkolenia']">${form/proponowany_termin_szkolenia}</div></td>
+                </tr>
+                <tr>
+                    <td class="zright">miejsce</td>
+                    <td class="zleft"><div tal:condition="php: form['miejsce']">${form/miejsce}</div></td>
+                </tr>
+                <tr>
+                    <td class="zright">proponowane miejsce szkolenia</td>
+                    <td class="zleft"><div tal:condition="php: form['proponowane_miejsce_szkolenia']">${form/proponowane_miejsce_szkolenia}</div></td>
+                </tr>
+                <tr>
+                    <td class="zright">osoby</td>
+                    <td class="zleft"><div tal:content="structure form/osoby" /></td>
+                </tr>
+                <tr>
+                    <td class="zright">liczba osób</td>
+                    <td class="zleft">${form/liczba_osob}</td>
+                </tr>
+                <tr>
+                    <td class="zright">cena za osobę</td>
+                    <td class="zleft">${form/cena_za_osobe} zł</td>
+                </tr>
+                <tr>
+                    <td class="zright">rabat</td>
+                    <td class="zleft">${form/rabat} zł</td>
+                </tr>
+                <tr>
+                    <td class="zright">wartość</td>
+                    <td class="zleft">${form/wartosc} zł</td>
+                </tr>                
+                <tr>
+                    <td class="zright">płatnik</td>
+                    <td class="zleft">${form/platnik_nazwa}<br/>
+                        ${form/platnik_ulica}, ${form/platnik_kod} ${form/platnik_miejscowosc}<br/>
+                        NIP: ${form/platnik_nip}<br/>
+                        tel. ${form/platnik_telefon}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="zright">kontakt</td>
+                    <td class="zleft">${form/kontakt_nazwa}<br/>
+                        ${form/kontakt_stanowisko}<br/>
+                        e-mail: <a href="mailto:${form/kontakt_email}">${form/kontakt_email}</a><br/>
+                        tel. ${form/kontakt_telefon}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="zright">IP zgłaszającego</td>
+                    <td class="zleft">${form/ip}</td>
+                </tr>
+            </table>
+        </tal:block>
+
+    </tal:block>
+</tal:block>
+
+
+
+

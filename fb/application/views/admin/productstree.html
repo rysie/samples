@@ -1,0 +1,159 @@
+<tal:block tal:condition="php: !isset(ajax)" metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <input type="hidden" id="root_id" value="${out/root_id}" />
+        <div id="tree-left"/>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+    </tal:block>
+</tal:block>
+
+
+
+
+
+<tal:block tal:condition="exists: ajax">
+    <form id="update" method="POST" action="/${subpath}admin/productstree/update/${ajax/root_id}/#${ajax/product/id}" enctype="multipart/form-data">
+        <tal:block tal:condition="php: is_array(ajax['product'])" tal:define="product ajax/product">
+            <input type="hidden" id="id" name="id" value="${product/id}" />
+            <h3>Nazwa produktu (ID: ${product/id})</h3>
+            <input type="text" id="title" name="title" value="${product/title}" />
+            <hr/>
+            <h3>Ceny</h3>
+            <table>
+                <tr>
+                    <td style="text-align: center">cena netto</td>
+                    <td style="text-align: center">cena brutto</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input style="width: 100px; text-align: right;" type="text" name="price" value="${product/price}"/>
+                    </td>
+                    <td><input style="width: 100px; text-align: right;" type="text" name="price_tax" value="${product/price_tax}"/></td>
+                </tr>
+            </table>
+            <hr/>
+            <!--h3>Opis</h3>
+            <textarea class="editor" id="content" name="content" tal:content="structure product/content" /-->
+
+            <!--h3>Zdjęcia</h3>
+            <div class="gallery-items" tal:condition="php: is_array(product['photos'])">
+                <ul class="sortable">
+                    <li tal:repeat="item product/photos">
+                        <div class="image">
+                            <img class="thumbnail" src="/products/${product/id}/thumbs/${item/file}" alt="${item/title}"/>
+                        </div>
+                        <div class="title">
+                            <input type="text" name="photos[${repeat/item/index}][title]" value="${item/title}" />
+                        </div>
+                        <div class="deleteItem">
+                            <input type="hidden" name="photos[${repeat/item/index}][id_item]" tal:attributes="value item/id" />
+                            <img src="/images/ico/trash.png" style="vertical-align: middle;" alt="usuń"/>&nbsp;usuń obraz
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            Dodaj nowe: <input style="margin: 16px 0 16px 32px" type="file" name="new_photo"/-->
+
+            <h3>Załączniki</h3>
+            <div class="doc-items" tal:condition="php: is_array(product['docs'])">
+                <ul class="sortable">
+                    <li tal:repeat="item product/docs">
+                        <div class="title">
+                            ${item/file}<input style="width: 100px" type="text" name="docs[${repeat/item/index}][title]" value="${item/title}" />
+                            <span class="deleteItem">
+                                <input type="hidden" name="docs[${repeat/item/index}][id_item]" tal:attributes="value item/id" />
+                                <img src="/${subpath}images/ico/trash.png" style="vertical-align: middle;" alt="usuń"/>&nbsp;usuń załącznik
+                            </span>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+            Dodaj nowy: <input style="margin: 16px 0 16px 32px" type="file" name="new_doc"/>
+
+
+            <div id="buttons_OKCANCEL" />
+        </tal:block>
+    </form>
+</tal:block>
+
+
+
+
+<!--<tal:block tal:condition="exists: ajax2" metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div id="tree-left"/>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <form id="update" method="POST" action="/admin/productstree/update" enctype="multipart/form-data">
+            <tal:block tal:condition="php: is_array(ajax['product'])" tal:define="product ajax/product">
+                <input type="hidden" id="id" name="id" value="${product/id}" />
+                <h3>Nazwa produktu (ID: ${product/id})</h3>
+                <input type="text" id="title" name="title" value="${product/title}" />
+                <h3>Kod produktu (Gromet ID)</h3>
+                <input type="text" id="gromet_id" name="gromet_id" value="${product/gromet_id}" />
+                <div style="padding: 12px 0 12px 25px;">
+                    <input type="checkbox" name="new" id="field_new" tal:attributes="checked php: product['new']? 'checked': null" />
+                    <label style="margin-right: 20px;" for="field_new">nowość</label>
+
+                    <input type="checkbox" name="preorder" id="field_preorder" tal:attributes="checked php: product['preorder']? 'checked': null" />
+                    <label for="field_preorder">produkt na zamówienie</label>
+                </div>
+                <hr/>
+                <h3>Wyświetlaj elementy podrzędne jako</h3>
+                <select id="gromet_id" name="class" >
+                    <option tal:repeat="class ajax/classes" 
+                            tal:attributes="selected php: class['id'] == product['class']['class_id']" 
+                            value="${class/id}">
+                        ${class/class_description}
+                    </option>
+                </select>
+                <hr/>
+                <h3>Ceny</h3>
+                <table>
+                    <tr>
+                        <td/>
+                        <td style="text-align: center">cena zwykła</td>
+                        <td style="text-align: center">cena promocyjna</td>
+                        <td style="text-align: center">wł./wył.</td>
+                    </tr>
+                    <tr tal:repeat="price product/prices">
+                        <td style="text-align: right;">${price/title}</td>
+                        <td>
+                            <input style="width: 100px; text-align: right;" type="text" name="prices[${price/id}][price]" value="${price/price}"/>
+                        </td>
+                        <td><input style="width: 100px; text-align: right;" type="text" name="prices[${price/id}][price_promo]" value="${price/price_promo}"/></td>
+                        <td><input style="width: 100px;" type="checkbox" name="prices[${price/id}][enabled]" tal:attributes="checked price/enabled"/></td>
+                    </tr>
+                </table>
+                <hr/>
+                <h3>Opis</h3>
+                <textarea class="editor" id="content" name="content" tal:content="structure product/content" />
+
+                <h3>Zdjęcia</h3>
+                <div class="gallery-items" tal:condition="php: is_array(product['photos'])">
+                    <ul class="sortable">
+                        <li tal:repeat="item product/photos">
+                            <div class="image">
+                                <img class="thumbnail" src="/products/${product/id}/thumbs/${item/file}" alt="${item/title}"/>
+                            </div>
+                            <div class="title">
+                                <input type="text" name="photos[${repeat/item/index}][title]" value="${item/title}" />
+                            </div>
+                            <div class="deleteItem">
+                                <input type="hidden" name="photos[${repeat/item/index}][id_item]" tal:attributes="value item/id" />
+                                <img src="/images/ico/trash.png" style="vertical-align: middle;" alt="usuń"/>&nbsp;usuń obraz
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                Dodaj nowe: <input style="margin: 16px 0 16px 32px" type="file" name="new_photo"/>
+
+                <div id="buttons_OKCANCEL" />
+            </tal:block>
+        </form>
+    </tal:block>
+</tal:block>-->

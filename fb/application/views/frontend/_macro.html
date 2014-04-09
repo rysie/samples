@@ -1,0 +1,313 @@
+<tal:block tal:condition="exists: macro" metal:use-macro="${macro}" />
+
+
+
+
+<tal:block metal:define-macro="galeria">
+    <div class="gallery" tal:condition="php: gallery">
+        <ul>
+            <li tal:repeat="item gallery">
+                <span tal:define="global g php:sizeof(gallery) > 1 ? '_gallx'.item['id_gallery'] : ''"/>
+                <a tal:attributes="class string:pirobox${g}" title="${item/title}&nbsp;" href="/${subpath}gallery/${item/id_gallery}/${item/file}">
+                    <img class="img" src="/${subpath}gallery/${item/id_gallery}/thumbs/${item/file}" alt="${item/title}" />
+                </a>
+            </li>
+        </ul>
+        <div class="clear"/>
+    </div>
+</tal:block>
+
+
+
+
+
+<ul class="ctree" metal:define-macro="recursive-list-content">
+    <li class="${php: item['content']['id'] == out['menuActive']? 'active': ''}
+        level_${item/content/level}"
+        tal:repeat="item list">
+        <a class="${php: item['content']['id'] == out['menuActive']? 'active': ''}"
+           href="/${subpath}${item/content/seo}/${item/content/id}">${item/content/title}
+            <div class="arrow" tal:condition="php: item['content']['id'] == out['menuActive']" />
+        </a>
+    <tal:block tal:condition="php: sizeof(item['children']) > 0"
+               metal:use-macro="recursive-list-content"
+               tal:define="list item/children" />
+</li>
+</ul>
+
+
+
+
+<tal:block metal:define-macro="recursive-products">
+
+    <ul class="ptree ${php: array_key_exists(0, productsTree)? 'level_'.productsTree['0']['content']['level']:''}">
+        <li id="ptree_${item/content/id}" 
+            class="${php: item['content']['id'] == out['productActive']? 'active': ''}
+            level_${item/content/level}
+            ${php: sizeof(item['children'])? 'hasChildren' : 'noChildren'}"
+            tal:repeat="item productsTree">
+            <a class="${php: item['content']['id'] == out['productActive']? 'active': ''}"
+               href="/${subpath}sklep/${item/content/seo}/${item/content/id}">${item/content/title}
+            </a>
+        <tal:block tal:condition="php: sizeof(item['children']) > 0"
+                   metal:use-macro="recursive-products"
+                   tal:define="productsTree item/children" />
+        </li>
+    </ul>
+
+</tal:block>
+
+
+
+
+
+<tal:block metal:define-macro="recursive-topmenu">
+    <ul class="ctree ${php: array_key_exists(0, topMenu)? 'level_'.topMenu['0']['content']['level']:''}">
+        <li class="${php: item['content']['id'] == out['menuActive']? 'active': ''}
+            level_${item/content/level}"
+            tal:repeat="item topMenu">
+            <a tal:condition="php: strlen(item['content']['redirect']) < 2"
+               class="${php: item['content']['id'] == out['menuActive']? 'active': ''}"
+               href="/${subpath}${item/content/seo}/${item/content/id}">${item/content/title}
+            </a>
+            <a tal:condition="php: strlen(item['content']['redirect']) > 1"
+               class="${php: item['content']['id'] == out['menuActive']? 'active': ''}"
+               href="/${subpath}${item/content/redirect}">${item/content/title}
+            </a>
+        <tal:block tal:condition="php: sizeof(item['children']) > 0"
+                   metal:use-macro="recursive-topmenu"
+                   tal:define="topMenu item/children" />
+        </li>
+    </ul>
+</tal:block>
+
+
+
+
+
+<tal:block metal:define-macro="breadcrumb">
+    <div class="breadcrumb">
+        <ul>
+            <tal:block tal:condition="php:is_array(out['breadcrumb'])">
+                <li><a href="/${subpath}"><img src="/${subpath}images/icon_home.png" alt="home" />&nbsp;Start</a>&nbsp;&raquo;</li>
+                <li tal:repeat="item out/breadcrumb">
+                    <a tal:condition="not: repeat/item/end" href="/${subpath}${item/seo}/${item/id}">${item/title}</a>
+                    <!--span tal:condition="repeat/item/end">${item/title}</span-->
+                    <a class="blue" tal:condition="repeat/item/end" href="/${subpath}${item/seo}/${item/id}">${item/title}</a>
+                <tal:block tal:condition="not: repeat/item/end">
+                    &raquo;
+                </tal:block>
+                </li>
+            </tal:block>
+            <tal:block tal:condition="php: !is_array(out['breadcrumb'])">
+                <li><a href="/${subpath}"><img src="/${subpath}images/icon_home.png" alt="home" />&nbsp;Start</a></li>
+            </tal:block>
+        </ul>
+    </div>
+</tal:block>
+
+
+
+
+<tal:block metal:define-macro="shopBreadcrumb">
+    <div class="breadcrumb">
+        <ul>
+            <tal:block tal:condition="php:is_array(out['shopBreadcrumb'])">
+                <li><a href="/${subpath}"><img src="/${subpath}images/icon_home.png" alt="home" />&nbsp;Start</a>&nbsp;&raquo;</li>
+                <li tal:repeat="item out/shopBreadcrumb">
+                    <a tal:condition="not: repeat/item/end" href="/${subpath}sklep${item/seo}/${item/id}">${item/title}</a>
+                    <a class="blue" tal:condition="repeat/item/end" href="/${subpath}sklep${item/seo}/${item/id}">${item/title}</a>
+                <tal:block tal:condition="not: repeat/item/end">
+                    &raquo;
+                </tal:block>
+                </li>
+            </tal:block>
+            <tal:block tal:condition="php: !is_array(out['shopBreadcrumb'])">
+                <li><a href="/${subpath}"><img src="/${subpath}images/icon_home.png" alt="home" />&nbsp;Start</a></li>
+            </tal:block>
+        </ul>
+    </div>
+</tal:block>
+
+
+
+
+
+<tal:block metal:define-macro="orderBreadcrumb">
+    <div class="breadcrumb">
+        <tal:block tal:condition="php:is_array(out['shopBreadcrumb'])">
+            <span tal:repeat="item out/shopBreadcrumb">${item/title}
+                <tal:block tal:condition="not: repeat/item/end">
+                    &raquo;
+                </tal:block>
+            </span>
+        </tal:block>
+    </div>
+</tal:block>
+
+
+
+
+
+<tal:block metal:define-macro="sidebarNews">
+    <div class="section" tal:condition="php: out['news'] && is_array(out['news'])">
+        <div class="section-top">
+            <div class="section-title-h2"><a href="/${subpath}aktualnosci">Aktualności</a></div>
+        </div>
+        <div class="section-center">
+            <ul>
+                <li tal:repeat="item out/news">
+                    <div class="section-title-h4"><a href="/${subpath}aktualnosci/${item/seo}/${item/id}">${item/title}</a></div>
+                    <div tal:content="structure item/lead" />
+                    <div>
+                        <a class="button_wiecej" href="/${subpath}aktualnosci/${item/seo}/${item/id}" />
+                        <div class="clear"/>
+                    </div>
+                </li>
+            </ul>
+            <a href="/${subpath}aktualnosci">Czytaj wszystkie aktualności &raquo;</a>
+        </div>
+        <div class="section-bottom"></div>
+    </div>
+
+</tal:block>
+
+
+
+
+<tal:block metal:define-macro="displayCart">
+    <div id="sidebar_cart" tal:condition="php: sizeof(out['cart'])> 0">
+        <div class="description">
+            <span style="color: #004488">Kliknij</span> na nazwę produktu, aby zobaczyć informacje o nim i zmienić zamawianą ilość.
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>cena</th>
+                    <th>szt.</th>
+                    <th>razem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr tal:repeat="item out/cart">
+                    <td class="cart_name">
+                        <div id="${item/rowid}" class="cart_item_name">
+                            ${item/name}
+                        </div>
+                        <div class="cart_price_type" tal:condition="php: item['options']['type']!= '---'">${item/options/type}</div>
+                        <div class="cart_item_details order_details">
+                            <div class="close-x bt-close" />
+                            <div class="breadcrumb">${item/options/breadcrumb}</div>
+                            <div class="left">
+                                <div class="section-title-h3">${item/name}</div>
+                                <div class="type" tal:condition="php: item['options']['type']!= '---'">${item/options/type}</div>
+                                <div class="type" tal:condition="php: item['options']['type']== '---'">&nbsp;</div>
+                                <div class="price">Cena: <b>${item/price}</b> zł / szt.</div>
+                                <div class="subtotal">Wartość: <span class="val">${item/subtotal}</span> zł</div>
+                                <form class="aktualizuj_koszyk" action="#" method="POST">
+                                    <input type="hidden" class="rowid" name="rowid" value="${item/rowid}" />
+                                    <input type="hidden" class="price" name="price" value="${item/price}" />
+                                    ilość (szt.) <input type="text" class="srebrny qty" value="${item/qty}" name="qty" />
+                                    <div style="padding: 6px 0; font-size: 8pt;">Wpisz 0, aby usunąć produkt.</div>
+                                    <input style="float: right; width: 190px; margin: 3px 0 10px;" class="zloty" type="submit" value="Aktualizuj"/><br/>
+                                    <br/>
+                                    <input style="float: right; width: 190px; margin: 3px 0 10px;" class="srebrny bt-close" type="button" value="Anuluj"/>
+                                    <br/>
+                                </form>
+                                <form action="/sklep/koszyk" method="GET">
+                                    <input style="float: right; width: 190px; margin: 3px 0 10px;" class="srebrny virtual_link" type="submit" value="Przejdź do zamawiania &raquo;"/>
+                                </form>
+                                <div class="clear" />
+
+                            </div>
+                            <div class="right" tal:condition="php: strlen(item['options']['photo']) > 0">
+                                <img tal:condition="php: strlen(item['options']['photo']) > 0"
+                                     src="/${subpath}${item/options/photo}" alt="" />
+                            </div>
+                            <div class="clear" />
+                        </div>
+                    </td>
+                    <td class="cart_price">${item/price}</td>
+                    <td class="cart_qty">${item/qty}</td>
+                    <td class="cart_subtotal">${item/subtotal}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="cart_subtotal" colspan="3">zamówienie netto</td>
+                    <td class="cart_subtotal"><b>${out/cart_total}</b></td>
+                </tr>
+                <!--
+                waga mieści się w przedziale ORAZ zamówienie <= 1500 zł - doliczamy koszt wysyłki
+                -->
+            <tal:block tal:condition="php: (out['cart_shipping_cost']['cost'] >= 0) && (out['cart_total'] <= 1500)">
+                <tr>
+                    <td class="cart_subtotal" colspan="3">wysyłka netto</td>
+                    <td class="cart_subtotal"><b>${out/cart_shipping_cost/cost_formatted}</b></td>
+                </tr>
+                <tr>
+                    <td class="cart_subtotal" colspan="3">razem netto</td>
+                    <td class="cart_subtotal"><b>${out/cart_total_with_shipping}</b></td>
+                </tr>
+                <tr>
+                    <td class="cart_subtotal" colspan="3">razem (z VAT 23%)</td>
+                    <td class="cart_subtotal"><b>${out/cart_total_with_shipping_vat}</b></td>
+                </tr>
+            </tal:block>
+            <!--
+            waga NIE mieści się w przedziale - skontaktujemy się w sprawie wysyłki
+            -->
+            <tal:block tal:condition="php: (out['cart_shipping_cost']['cost'] < 0)">
+                <tr>
+                    <td class="cart_subtotal" colspan="3">razem z VAT 23%</td>
+                    <td class="cart_subtotal"><b>${out/cart_total_vat}</b></td>
+                </tr>
+                <tr>
+                    <td class="cart_subtotal" colspan="4" style="color: #900000">
+                        Waga przekracza 31,5 kg lub zamawiasz towar dłuższy niż 1.5 m.
+                        Koszt wysyłki obliczy nasz pracownik.
+                    </td>
+                </tr>
+            </tal:block>
+
+            <!--
+            waga mieści się w przedziale ORAZ zamówienie >= 1500 zł - koszt wysyłki = 0
+            -->
+            <tal:block tal:condition="php: (out['cart_shipping_cost']['cost'] >= 0) && (out['cart_total'] > 1500)">
+                <tr>
+                    <td class="cart_subtotal" colspan="3" style="color: #900000">pokrywamy koszty wysyłki</td>
+                    <td class="cart_subtotal" style="color: #900000"><b>0.00</b></td>
+                </tr>
+                <tr>
+                    <td class="cart_subtotal" colspan="3">razem netto</td>
+                    <td class="cart_subtotal"><b>${out/cart_total}</b></td>
+                </tr>
+                <tr>
+                    <td class="cart_subtotal" colspan="3">razem z VAT 23%</td>
+                    <td class="cart_subtotal"><b>${out/cart_total_vat}</b></td>
+                </tr>
+            </tal:block>
+            </tfoot>
+        </table>
+
+        <form action="/sklep/koszyk" method="GET">
+            <input style="float: right; width: 190px; margin: 10px 0 10px;" class="srebrny" type="submit" value="Przejdź do zamawiania &raquo;"/>
+        </form>
+        <div class="clear" />
+    </div>
+
+    <div id="sidebar_cart" tal:condition="php: sizeof(out['cart']) == 0">
+        Twój koszyk jest jeszcze pusty.
+    </div>
+
+</tal:block>
+
+
+
+
+
+<tal:block metal:define-macro="tracking">
+    <script type="text/javascript">var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-32675244-1']);_gaq.push(['_setDomainName', 'gromet.com.pl']);_gaq.push(['_trackPageview']);        (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);})();</script>
+</tal:block>
+

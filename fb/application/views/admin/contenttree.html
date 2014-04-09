@@ -1,0 +1,34 @@
+<tal:block tal:condition="php: !isset(ajax)" metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div id="tree-left"/>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+    </tal:block>
+</tal:block>
+
+
+
+
+<tal:block tal:condition="exists: ajax">
+    <h2 tal:condition="php: !ajax" tal:content="string:Takiej treści nie ma w bazie" />
+
+    <form id="update" method="POST" action="/${subpath}admin/contenttree/update">
+        <tal:block tal:condition="php: is_array(ajax)">
+            <input type="hidden" id="id" name="id" value="${ajax/id}" />
+            <h3>Tytuł</h3>
+            <input type="text" id="title" name="title" value="${ajax/title}" />
+            <h3>Przekierowanie</h3>
+            <input type="text" id="redirect" name="redirect" value="${ajax/redirect}" />
+            <h3>Lead</h3>
+            <textarea class="editor" id="lead" name="lead" tal:content="structure ajax/lead" />
+            <!--input type="checkbox" name="tabs" tal:attributes="checked php: ajax['tabs']? 'checked': null" />&nbsp;treści podrzędne w formie zakładek -->
+            <h3>Treść</h3>
+            <textarea class="editor" id="content" name="content" tal:content="structure ajax/content" />
+            <div id="buttons_OKCANCEL" />
+
+        </tal:block>
+    </form>
+</tal:block>
+

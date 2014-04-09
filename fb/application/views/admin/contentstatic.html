@@ -1,0 +1,40 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+            <div tal:condition="exists: contentList" id="contentList">
+                <ul>
+                    <li tal:repeat="list contentList"><a href="/${subpath}admin/contentstatic/edit/${list/id}">${list/admin_title}</a></li>
+                </ul>
+            </div>
+        </div>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+        
+        <!--
+            Jeden news: edycja
+        -->
+
+        <tal:block tal:condition="exists: item">
+            <h1>Treści statyczne: edycja</h1>
+
+            <form id="update" action="/${subpath}admin/contentstatic/update/${item/id}" method="POST" enctype="multipart/form-data">
+                <h2>${item/admin_title}</h2>
+                <h3>Tytuł</h3>
+                <input type="text" name="title" tal:attributes="value item/title" />
+                <h3>Lead</h3>
+                <textarea name="lead" id="lead" cols="" rows="" class="editor">${item/lead}</textarea>
+                <h3>Treść</h3>
+                <textarea name="content" id="content" cols="" rows="" class="editor">${item/content}</textarea>
+                <div class="clear" />
+                <div id="buttons_OKCANCEL" />
+            </form>
+        </tal:block>
+
+    </tal:block>
+</tal:block>
+
+
+
+

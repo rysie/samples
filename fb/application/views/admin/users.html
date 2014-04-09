@@ -1,0 +1,193 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+
+        </div>
+    </tal:block>
+
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <!--
+               Wszystkie newsy: lista
+        -->
+
+        <tal:block tal:condition="exists: userList">
+            <h1>Lista użytkowników</h1>
+            <tal:block tal:content="structure out/paginacja" />
+            <table class="auto total">
+                <tr>
+                    <th style="width: 75px;">id</th>
+                    <th style="width: 150px;">email</th>
+                    <th style="width: 30px;">st</th>
+                    <th style="width: 300px;">dane</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tal:block tal:repeat="user userList">
+                    <tr class="status_${user/status}">
+                        <td class="data">${user/id_users}</td>
+                        <td><a href="/${subpath}admin/users/edit/${user/id_users}">${user/email}</a></td>
+                        <td tal:content="structure user/status" />
+                        <td>
+                            <div tal:condition="php: is_array(user['data'])" tal:repeat='ud user/data'>
+                                <b>${ud/name}</b>, firma: <b>${ud/company}</b><br/>
+                                ${ud/address} ${ud/zip} ${ud/locality}<br/>
+                                ${ud/nip}
+                            </div>
+                            &nbsp;
+                        </td>
+                        <td class="data">
+                            <a href="/${subpath}admin/users/edit_credentials/${user/id_users}">login/hasło</a><br/>
+                            <a href="/${subpath}admin/users/edit/${user/id_users}">zmień&nbsp;dane</a><br/>
+                    <tal:block tal:condition="php: user['status'] == 2">
+                        <a class="activateItem" href='/${subpath}admin/users/activate/${user/id_users}'>aktywuj</a><br/>
+                    </tal:block>
+                    <br/>
+                    <a class="deleteItem" href="/${subpath}admin/users/delete/${user/id_users}">usuń&nbsp;wpis</a>
+                    </td>
+                    </tr>
+                </tal:block>
+            </table>
+        </tal:block>
+
+
+        <!--
+            Jeden news: edycja
+        -->
+
+        <tal:block tal:condition="exists: user">
+            <h1>Użytkownik: edycja danych</h1>
+
+            <form id="update" action="/${subpath}admin/users/update/${user/id_users}" method="POST" enctype="multipart/form-data">
+
+                <table class="bordered" style="background: url('images/transparent50.png');">
+                    <tr>
+                        <td style="vertical-align: top;">
+                            <h3>Dane firmy (do FV)</h3>
+                            <p>&nbsp;</p>
+                            <table>
+                                <tr>
+                                    <td class="right light">imię<br/>i nazwisko</td>
+                                    <td><input type="text" class="text" id="i1" name="data_invoice[name]" placeholder="imię i nazwisko..." value="${out/user_data/invoice/name}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">firma (pełna nazwa)</td>
+                                    <td><input type="text" class="text" id="i2" name="data_invoice[company]" placeholder="firma..." value="${out/user_data/invoice/company}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">ulica<br/>i nr lokalu</td>
+                                    <td><input type="text" class="text" id="i3" name="data_invoice[address]" placeholder="ulica i nr lokalu..." value="${out/user_data/invoice/address}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">kod<br/>pocztowy</td>
+                                    <td><input type="text" class="text" id="i4" name="data_invoice[zip]" placeholder="kod pocztowy..." value="${out/user_data/invoice/zip}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">miejscowość</td>
+                                    <td><input type="text" class="text" id="i5" name="data_invoice[locality]" placeholder="miejscowość..." value="${out/user_data/invoice/locality}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">kraj</td>
+                                    <td><input type="text" class="text" id="i6" name="data_invoice[country]" placeholder="kraj..." value="${out/user_data/invoice/country}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">NIP</td>
+                                    <td><input type="text" class="text" id="i7" name="data_invoice[nip]" placeholder="NIP..." value="${out/user_data/invoice/nip}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">REGON</td>
+                                    <td><input type="text" class="text" id="i8" name="data_invoice[regon]" placeholder="REGON..." value="${out/user_data/invoice/regon}"/></td>
+                                </tr>                                    
+                                <tr>
+                                    <td class="right light">rodzaj<br/>działalności</td>
+                                    <td>
+                                        <select type="text" class="text" id="i9" name="data_invoice[business_type]" placeholder="rodzaj działalności...">
+                                            <option tal:repeat="type out/business_types" value="${type/id}" 
+                                                    tal:attributes="selected php: out['user_data']['invoice']['business_type'] == type['id'] ? 'selected' : ''"
+                                                    >${type/type}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;">
+                            <h3>Dane do wysyłki</h3>
+                            <table>
+                                <tr>
+                                    <td class="right light">imię<br/>i nazwisko</td>
+                                    <td><input type="text" class="text" id="s1" name="data_send[name]" placeholder="imię i nazwisko..." value="${out/user_data/send/name}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">firma</td>
+                                    <td><input type="text" class="text" id="s2" name="data_send[company]" placeholder="firma..." value="${out/user_data/send/company}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">ulica<br/>i nr lokalu</td>
+                                    <td><input type="text" class="text" id="s3" name="data_send[address]" placeholder="ulica i nr lokalu..." value="${out/user_data/send/address}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">kod<br/>pocztowy</td>
+                                    <td><input type="text" class="text" id="s4" name="data_send[zip]" placeholder="kod pocztowy..." value="${out/user_data/send/zip}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">miejscowość</td>
+                                    <td><input type="text" class="text" id="s5" name="data_send[locality]" placeholder="miejscowość..." value="${out/user_data/send/locality}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">kraj</td>
+                                    <td><input type="text" class="text" id="s6" name="data_send[country]" placeholder="kraj..." value="${out/user_data/send/country}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="right light">telefon</td>
+                                    <td><input type="text" class="text" id="s6" name="data_send[phone]" placeholder="telefon..." value="${out/user_data/send/phone}"/></td>
+                                </tr>
+                            </table>                                
+
+                        </td>
+                    </tr>
+                </table>
+
+
+                <div id="buttons_OKCANCEL" />
+            </form>
+        </tal:block>
+
+
+        <!--
+            Jeden formularz: podgląd
+        -->
+
+        <tal:block tal:condition="exists: credentials">
+            <h1>Użytkownik: login i hasło</h1>
+            <form id="update" action="/${subpath}admin/users/update_credentials/${credentials/id_users}" method="POST" enctype="multipart/form-data">
+                <h3>Login (email)</h3>
+                <input type="text" name="email" tal:attributes="value credentials/email" />
+                <h3>Hasło (zostaw puste, aby nie zmieniać)</h3>
+                <input type="text" id="password" name="password" value="" />
+                <h3>Status</h3>
+                <select name="status" id="status">
+                    <option value="1" tal:attributes="selected php: credentials['status'] == 1 ? 'selected' : ''">nie potwierdził maila</option>
+                    <option value="2" tal:attributes="selected php: credentials['status'] == 2 ? 'selected' : ''">potwierdził maila, ale nieaktywny</option>
+                    <option value="3" tal:attributes="selected php: credentials['status'] == 3 ? 'selected' : ''">w pełni aktywny</option>
+                </select>
+
+
+                <div class="clear" />
+                <br/><br/>
+                <div id="buttons_OKCANCEL" />
+            </form>            
+        </tal:block>
+
+
+
+
+
+    </tal:block>
+</tal:block>
+
+
+
+

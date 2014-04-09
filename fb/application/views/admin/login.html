@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:phptal="http://phptal.org/ns/phptal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      >
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="author"           content="rysie.com" />
+        <meta name="generator"        content="rysie.com" />
+        <meta name="copyright"        content="rysie.com" />
+        <meta name="robots"           content="allow" />
+        <meta name="revisit-after"    content="2 days" />
+        <link rel="shortcut icon" href="/${subpath}images/favicon.gif" type="image/vnd.microsoft.icon"/>
+        <link rel="icon" href="/${subpath}images/favicon.gif" type="image/vnd.microsoft.icon"/>
+        <title>Meridian: Logowanie</title>
+        <link rel="stylesheet" type="text/css" href="/${subpath}css/admin.css" />
+    </head>
+
+
+    <body>
+        <div id="header" style="height: 20px;" />
+        <div id="container">
+            <div id="sidebar">
+
+            </div>
+            <div id="mcontent">
+                <form id="zaloguj" name="zaloguj" action="/${subpath}admin/welcome/login" method="POST">
+				<input style="width: 250px;" name="login" type="text" value="${login}" />&nbsp;login<br/>
+				<input style="width: 250px;" name="password" type="password" />&nbsp;hasło<br/>
+                    <button class="prawa" onclick="zaloguj.submit();">&nbsp;zaloguj</button>
+                    <div tal:condition="errors" class="errors" tal:content="structure errors" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="stopka">CMS &copy; <span tal:content="php: date('Y')"></span> <a href="http://rysie.com" rel="external">rysie.com</a></div>
+    </body>
+</html>

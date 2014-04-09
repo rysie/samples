@@ -1,0 +1,86 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+            <input type="hidden" id="today" tal:attributes="value php: date('Y-m-d');" />
+            <div tal:condition="exists: years" id="years">
+                <h3>Rok:</h3>
+                <ul>
+                    <li tal:repeat="year years"><a href="/${subpath}admin/form/kontakt/${year}">${year}</a></li>
+                </ul>
+            </div>
+            <h3 tal:condition="exists: form"><a href="/${subpath}admin/form/kontakt">Powróć do listy &raquo;</a></h3>
+        </div>
+    </tal:block>
+
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <!--
+               Wszystkie newsy: lista
+        -->
+
+        <tal:block tal:condition="exists: forms">
+            <h1>Formularze kontaktowe w roku ${year}</h1>
+            <table class="auto total">
+                <tr>
+                    <th style="width: 75px;">data wpisu</th>
+                    <th style="width: 150px;">nazwisko</th>
+                    <th style="width: 150px;">e-mail</th>
+                    <th style="">wiadomość</th>
+                    <th style="width: 80px;">&nbsp;</th>
+                </tr>
+                <tr tal:repeat="form forms">
+                    <td class="data">${form/datetime}</td>
+                    <td><a href="/${subpath}admin/form/view/kontakt/${form/id}">${form/nazwisko}</a></td>
+                    <td tal:content="form/email" />
+                    <td tal:content="form/wiadomosc_short" />
+                    <td class="data">
+                        <a href="/${subpath}admin/form/view/kontakt/${form/id}">pokaż wpis</a><br/><br/>
+                        <a class="deleteItem" href="/${subpath}admin/form/delete/kontakt/${form/id}">usuń wpis</a>
+                    </td>
+                </tr>
+            </table>
+        </tal:block>
+
+
+        <!--
+            Jeden formularz: podgląd
+        -->
+
+        <tal:block id="metryczka" tal:condition="exists: form">
+            <h1>Metryczka formularza <span tal:content="form/id" /></h1>
+            <table class="form_view">
+                <tr>
+                    <td class="zright">data zgłoszenia</td>
+                    <td class="zleft">${form/datetime}</td>
+                </tr>                
+                <tr>
+                    <td class="zright">imię i nazwisko</td>
+                    <td class="zleft">${form/nazwisko}</td>
+                </tr>
+                <tr>
+                    <td class="zright">telefon</td>
+                    <td class="zleft">${form/telefon}</td>
+                </tr>
+                <tr>
+                    <td class="zright">e-mail</td>
+                    <td class="zleft"><a href="mailto:${form/email}">${form/email}</a></td>
+                </tr>
+                <tr>
+                    <td class="zright">wiadomość</td>
+                    <td class="zleft"><div tal:content="structure form/wiadomosc" /></td>
+                </tr>
+                <tr>
+                    <td class="zright">IP zgłaszającego</td>
+                    <td class="zleft">${form/ip}</td>
+                </tr>
+            </table>
+        </tal:block>
+
+    </tal:block>
+</tal:block>
+
+
+
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html metal:define-macro="glowny"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:phptal="http://phptal.org/ns/phptal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      >
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="author"           content="Marcin Maciński" />
+        <meta name="robots"           content="deny" />
+        <meta name="revisit-after"    content="2 days" />
+
+        <title>Meridian: panel administracyjny</title>
+
+        <link rel="shortcut icon" href="/${subpath}images/favicon.ico" type="image/vnd.microsoft.icon" />
+        <link rel="icon" href="/${subpath}images/favicon.gif" type="image/gif" />
+
+        <link rel="stylesheet" type="text/css" href="/${subpath}css/admin.css" />
+        <link rel="stylesheet" type="text/css" href="/${subpath}js/extjs/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="/${subpath}js/extjs/resources/css/icons/woo.css" />
+        <link rel="stylesheet" type="text/css" href="/${subpath}js/extjs/resources/css/icons/silk.css" />
+        <link rel="stylesheet" type="text/css" tal:condition="exists: css" tal:repeat="styl css" href="/${subpath}css/${styl}" />
+        <script type="text/javascript" src="/${subpath}js/jquery-1.4.4.min.js"/>
+
+        <script type="text/javascript" src="/${subpath}js/ckeditor/ckeditor.js"/>
+        <script type="text/javascript" src="/${subpath}js/ckeditor/adapters/jquery.js"/>
+
+        <script type="text/javascript" src="/${subpath}js/extjs/adapter/jquery/ext-jquery-adapter.js"/>
+        <script type="text/javascript" src="/${subpath}js/extjs/ext-all-debug.js" />
+        <script type="text/javascript" src="/${subpath}js/extjs.treestate.js" />
+        <script type="text/javascript" src="/${subpath}js/extjs/src/locale/ext-lang-pl.js" />
+        <script type="text/javascript" src="/${subpath}js/ckeditor_default.js"/>
+        <script type="text/javascript" tal:condition="exists:js" tal:repeat="skrypt js" src="/${subpath}${skrypt}"/>
+        <script type="text/javascript" src="/${subpath}js/_admin.js" />
+    </head>
+
+
+    <body>
+        <div id="container">
+            <div id="topmenu"></div>
+            <div class="spacer" />
+
+            <div id="sidebar">
+                <tal:block metal:define-slot="sidebar" />
+            </div>
+            <div id="mcontent">
+                <tal:block metal:define-slot="mcontent" />
+            </div>
+
+        </div>
+
+        <div id="stopka">Dane zawarte w systemie &copy; <span tal:content="php: date('Y')"></span> Meridian</div>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+
+    <tal:block metal:fill-slot="content">
+        <div id="content-center" class="text-content">
+            <div tal:condition="php: out['reason'] == 'too_late'">
+                <h1>Spóźniłeś się...</h1>
+                <h2>Konkurs jest już zakończony.</h2>
+                <br/>
+                <p>Konkurs trwał w dniach <b>${out/time_start}</b> - <b>${out/time_stop}</b>.</p>
+                <p>Nic straconego - poczekaj na nasz kolejny konkurs!</p>
+
+            </div>
+
+
+            <div tal:condition="php: out['reason'] == 'too_early'">
+                <h2>Konkurs jeszcze się nie rozpoczął.</h2>                
+                <p>Konkurs będzie trwał w dniach <b>${out/time_start}</b> - <b>${out/time_stop}</b>.</p>
+            </div>
+
+
+            <div>
+                <a class="btn btn-default" href="/${subpath}back"><i class="fa fa-arrow-left"></i>&nbsp;powróć</a>
+            </div>
+
+        </div>
+    </tal:block>
+
+
+</tal:block>

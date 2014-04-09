@@ -1,0 +1,48 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html metal:define-macro="glowny"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:phptal="http://phptal.org/ns/phptal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:fb="http://www.facebook.com/2008/fbml"
+      >
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="robots"           content="${php:robots? 'allow':'deny'}" />
+        <meta name="revisit-after"    content="1 day" />
+        <meta name="Description"      tal:condition="exists: out/meta" tal:attributes="content out/meta" />
+        <meta name="appId"  content="${out/appId}" />
+        <title><tal:block tal:condition="exists: out/sectionTitle">${out/sectionTitle} - </tal:block>Hotele Focus</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
+        <link href="/${subpath}/css/fonts/aller.css" rel="stylesheet" />
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet" />
+
+        <link rel="stylesheet" type="text/css" href="/${subpath}css/main.css" />
+        <link rel="stylesheet" type="text/css" tal:condition="exists: css" tal:repeat="styl css" href="/${subpath}css/${styl}" />
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>     
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="/${subpath}js/jquery.validate.min.js"></script>
+        <script src="/${subpath}js/jquery.validate.messages_pl.js"></script>
+    </head>
+
+
+    <body>
+        <div id="fb-root"></div>
+        <div id="_container" class="_container">
+            <div id="content">
+                <div id="main_content">
+                    <tal:block metal:define-slot="content" />
+                </div>
+                <div class="clear" />
+            </div>
+        </div>
+        <script type="text/javascript" src="${hostname}js/__compiled.js" />
+    </body>
+</html>

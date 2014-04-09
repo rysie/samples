@@ -1,0 +1,155 @@
+<tal:block tal:condition="php: out['action'] == 'promocje'" metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <h4>Produkty z ceną promocyjną</h4>
+        <ul class="promo">
+            <li tal:repeat="item out/promocje">
+                <div class="small" tal:content="structure item/breadcrumb" />
+                <a href="/${subpath}admin/products/promocje/${item/id}">
+                    ${item/title}
+                </a>
+                <div class="small">${item/price} -> ${item/price_promo}</div>
+            </li>
+        </ul>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+        <tal:block tal:condition="exists: out/product">
+            <form id="update" method="POST" action="/${subpath}admin/products/promocje_update" enctype="multipart/form-data">
+                <tal:block tal:condition="php: is_array(out['product'])" tal:define="product out/product">
+                    <input type="hidden" id="id" name="id" value="${product/id}" />
+                    <h3>Produkt nr <b>${product/id}</b> --- Gromet ID <b>${product/gromet_id}</b></h3>
+                    <h1>${product/title}</h1>
+                    <table>
+                        <tr>
+                            <td/>
+                            <td style="text-align: center">cena zwykła</td>
+                            <td style="text-align: center">cena promocyjna</td>
+                            <td style="text-align: center">wł./wył.</td>
+                        </tr>
+                        <tr tal:repeat="price product/prices">
+                            <td style="text-align: right;">${price/title}</td>
+                            <td>
+                                <input style="width: 100px; text-align: right;" type="text" name="prices[${price/id}][price]" value="${price/price}"/>
+                            </td>
+                            <td><input style="width: 100px; text-align: right;" type="text" name="prices[${price/id}][price_promo]" value="${price/price_promo}"/></td>
+                            <td><input style="width: 100px;" type="checkbox" name="prices[${price/id}][enabled]" tal:attributes="checked price/enabled"/></td>
+                        </tr>
+                    </table>
+                    <div id="buttons_OKCANCEL" />
+                </tal:block>
+            </form>
+        </tal:block>
+    </tal:block>
+</tal:block>
+
+
+
+
+
+<tal:block tal:condition="php: out['action'] == 'nowosci'" metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <h4>Nowości w ofercie</h4>
+        <ul class="promo">
+            <li tal:repeat="item out/nowosci">
+                <div class="small" tal:content="structure item/breadcrumb" />
+                <a href="/${subpath}admin/products/nowosci/${item/id}">
+                    ${item/title}
+                </a>
+            </li>
+        </ul>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+        <tal:block tal:condition="exists: out/product">
+            <form id="update" method="POST" action="/${subpath}admin/products/nowosci_update" enctype="multipart/form-data">
+                <tal:block tal:condition="php: is_array(out['product'])" tal:define="product out/product">
+                    <input type="hidden" id="id" name="id" value="${product/id}" />
+                    <h3>Produkt nr <b>${product/id}</b> --- Gromet ID <b>${product/gromet_id}</b></h3>
+                    <h1>${product/title}</h1>
+                    Nowość <input type="checkbox" name="new" id="field_new" tal:attributes="checked php: product['new']? 'checked': null" />
+                    <div id="buttons_OKCANCEL" />
+                </tal:block>
+            </form>
+        </tal:block>
+    </tal:block>
+</tal:block>
+
+
+
+
+
+
+
+<tal:block tal:condition="php: out['action'] == 'errors'" metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <h4 style="background: #900000; color: white; padding: 4px; margin: 0 0 8px 0;">Aktywna cena = 0 zł (${php: sizeof(out['errors']['active_price_null'])} szt.)</h4>
+        <ul class="promo">
+            <li tal:repeat="item out/errors/active_price_null">
+                <div class="small" tal:content="structure item/breadcrumb" />
+                <a href="/${subpath}admin/products/errors/prices/${item/id}">
+                    ${item/title}
+                </a>
+            </li>
+        </ul>        
+
+        <h4 style="background: #900000; color: white; padding: 4px; margin: 0 0 8px 0;">Brak aktywnych cen (${php: sizeof(out['errors']['no_price_enabled'])} szt.)</h4>
+        <ul class="promo">
+            <li tal:repeat="item out/errors/no_price_enabled">
+                <div class="small" tal:content="structure item/breadcrumb" />
+                <a href="/${subpath}admin/products/errors/prices/${item/id}">
+                    ${item/title}
+                </a>
+            </li>
+        </ul>
+
+        <h4 style="background: #900000; color: white; padding: 4px">Brak wagi (${php: sizeof(out['errors']['weight'])} szt.)</h4>
+        <ul class="promo">
+            <li tal:repeat="item out/errors/weight">
+                <div class="small" tal:content="structure item/breadcrumb" />
+                <a href="/${subpath}admin/products/errors/weight/${item/id}">
+                    ${item/title}
+                </a>
+            </li>
+        </ul>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <form tal:condition="exists: out/subaction" id="update" method="POST" action="/${subpath}admin/products/errors_update/${out/subaction}" enctype="multipart/form-data">
+            <tal:block tal:condition="php: is_array(out['product'])" tal:define="product out/product">
+                <input type="hidden" id="id" name="id" value="${product/id}" />
+                <h3>Produkt nr <b>${product/id}</b> --- Gromet ID <b>${product/gromet_id}</b></h3>
+                <h1>${product/title}</h1>
+
+                <tal:block tal:condition="php: out['subaction'] == 'weight'">
+                    Waga&nbsp;
+                    <input style="width: 200px;" type="text" name="weight" id="weight" value="${product/weight}" />
+                </tal:block>
+
+                <tal:block tal:condition="php: out['subaction'] == 'prices'">
+                    <table>
+                        <tr>
+                            <td/>
+                            <td style="text-align: center">cena zwykła</td>
+                            <td style="text-align: center">cena promocyjna</td>
+                            <td style="text-align: center">wł./wył.</td>
+                        </tr>
+                        <tr tal:repeat="price product/prices">
+                            <td style="text-align: right;">${price/title}</td>
+                            <td>
+                                <input style="width: 100px; text-align: right;" type="text" name="prices[${price/id}][price]" value="${price/price}"/>
+                            </td>
+                            <td><input style="width: 100px; text-align: right;" type="text" name="prices[${price/id}][price_promo]" value="${price/price_promo}"/></td>
+                            <td><input style="width: 100px;" type="checkbox" name="prices[${price/id}][enabled]" tal:attributes="checked price/enabled"/></td>
+                        </tr>
+                    </table>       
+                </tal:block>
+
+                <div id="buttons_OKCANCEL" />
+            </tal:block>
+        </form>
+    </tal:block>
+</tal:block>

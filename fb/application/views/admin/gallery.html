@@ -1,0 +1,65 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div id="tree-left"/>
+    </tal:block>
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <tal:block tal:condition="exists: gallery">
+            <div class="fieldset flash" style="float: left;" id="fsUploadProgress">
+                <span class="legend">Wczytywanie plików</span>
+                <div id="uploadButton" /><br/>
+                <input type="button" id="btnCancel" value="Anuluj wczytywanie" 
+                       style="margin: 8px 0 0 114px;" disabled="disabled" />
+                <br/>
+                <div id="uploadResult" />
+            </div>            
+            <input type="hidden" name="hidFileID" id="hidFileID" value="" />
+            <input type="hidden" name="galleryId" id="galleryId" value="${gallery/id}" />
+            <input type="hidden" name="sessionId" id="sessionId" value="${out/sessionId}" />    
+
+            <div class="fieldset" style="float: left; height: 50px; width: 180px;">
+                <span class="legend">ID</span>
+                <h1>${gallery/id}</h1>
+            </div>  
+
+
+            <form id="update" method="POST" action="/${subpath}admin/gallery/updateGallery" enctype="multipart/form-data">
+                <tal:block tal:condition="php: is_array(gallery)">
+                    <input type="hidden" id="id_gallery" name="id_gallery" value="${gallery/id}" />
+                    <h3>Tytuł</h3>
+                    <input type="text" id="gallery_title" name="gallery_title" value="${gallery/title}" />
+                    <div class="gallery-items" tal:condition="php: gallery['items']">
+                        <ul class="sortable">
+                            <li tal:repeat="item gallery/items">
+                                <div class="image">
+                                    <img class="thumbnail" src="/${subpath}gallery/${gallery/id}/thumbs/${item/file}" alt="${item/title}"/>
+                                </div>
+                                <div class="title">
+                                    <input type="text" name="title[]" value="${item/title}" />
+                                </div>
+                                <div class="deleteItem">
+                                    <input type="hidden" name="id_item[]" tal:attributes="value item/id" />
+                                    <img src="/${subpath}images/ico/trash.png" style="vertical-align: middle;" alt="usuń"/>&nbsp;usuń obraz
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div tal:condition="php: ! gallery['items']">
+                        W tej galerii nie ma jeszcze zdjęć.
+                    </div>
+
+                    <div class="clear" />
+                    <div id="buttons_OKCANCEL" />
+                </tal:block>
+            </form>
+        </tal:block>        
+
+
+    </tal:block>
+</tal:block>
+
+
+
+

@@ -1,0 +1,273 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+
+    <tal:block metal:fill-slot="content">
+        <div id="page_3">
+            <div class="logo"></div>
+            <h2>Formularz rejestracyny</h2>
+            <div class="has_errors" tal:condition="out/has_errors">
+                Formularz zawiera błędy.<br/>Sprawdź pola i popraw je.
+            </div>
+            <form id="form" action="/${subpath}go" method="POST" role="form" >
+
+                <fieldset class="black-labels">
+                    <h3>Dane kontaktowe</h3>
+                    <div class="pad">
+                        <label for="imie"><span>Imię</span></label>
+                        <input class="float" id="imie" name="imie" type="text" value="${out/form/imie}"/>
+                        <div class="error margined" tal:content="structure out/errors/imie" />
+
+                        <label for="nazwisko"><span>Nazwisko</span></label>
+                        <input class="float" id="nazwisko" name="nazwisko" type="text" value="${out/form/nazwisko}"/>
+                        <div class="error margined" tal:content="structure out/errors/nazwisko" />
+
+                        <label for="telefon"><span>Telefon</span></label>
+                        <input class="float" id="telefon" name="telefon" type="text" value="${out/form/telefon}"/>
+                        <div class="error margined" tal:content="structure out/errors/telefon" />
+
+                        <label for="email"><span>E-mail</span></label>
+                        <input class="float" id="email" name="email" type="text" value="${out/form/email}"/>
+                        <div class="error margined" tal:content="structure out/errors/email" />
+
+                        <label for="email2"><span>Powtórz e-mail</span></label>
+                        <input class="float" id="email2" name="email2" type="text" value="${out/form/email2}"/>
+                        <div class="error margined" tal:content="structure out/errors/email2" />
+                    </div>
+                </fieldset>
+
+                <fieldset class="red-labels">
+                    <h4>1. W jakich celach najczęściej podróżujesz? </h4>
+                    <div class="pad">
+                        <input id="p01-1" name="cel" value="turystyczny" type="radio" 
+                               tal:attributes="checked php: out['form']['cel'] == 'turystyczny'" />
+                        <label for="p01-1">turystycznych</label>
+                        <br/>
+                        <input id="p01-2" name="cel" value="sluzbowy" type="radio" 
+                               tal:attributes="checked php: out['form']['cel'] == 'sluzbowy'" />
+                        <label for="p01-2">służbowych</label>
+
+                        <div class="error" tal:content="structure out/errors/cel" />
+                    </div>
+
+                    <h4>2. Jakie zakwaterowanie najczęściej wybierasz?</h4>
+                    <div class="pad">
+                        <input id="p02-1" name="zakwaterowanie" type="radio" value='hotele'
+                               tal:attributes="checked php: out['form']['zakwaterowanie'] == 'hotele'" />
+                        <label for="p02-1">hotele</label>
+                        <br/>
+                        <input id="p02-2" name="zakwaterowanie" type="radio" value='motele'
+                               tal:attributes="checked php: out['form']['zakwaterowanie'] == 'motele'" />
+                        <label for="p02-2">motele</label>
+                        <br/>
+                        <input id="p02-3" name="zakwaterowanie" type="radio" value='rodzina'
+                               tal:attributes="checked php: out['form']['zakwaterowanie'] == 'rodzina'" />
+                        <label for="p02-3">nocleg u rodziny</label>
+                        <br/>
+                        <input id="p02-4" name="zakwaterowanie" type="radio" value='pensjonaty'
+                               tal:attributes="checked php: out['form']['zakwaterowanie'] == 'pensjonaty'" />
+                        <label for="p02-4">pensjonaty</label>
+                        <br/>
+                        <input id="p02-5" name="zakwaterowanie" type="radio" value='wynajem'
+                               tal:attributes="checked php: out['form']['zakwaterowanie'] == 'wynajem'" />
+                        <label for="p02-5">wynajem mieszkań/pokoi</label>
+                        <br/>
+                        <input id="p02-6" name="zakwaterowanie" type="radio" value='inne'
+                               tal:attributes="checked php: out['form']['zakwaterowanie'] == 'inne'" />
+                        <label for="p02-6">inne:</label>
+                        <input id="zakwaterowanie_inne" name="zakwaterowanie_inne" type="text"
+                               value="${out/form/zakwaterowanie_inne}"/>
+
+                        <div class="error" tal:content="structure out/errors/zakwaterowanie" />
+                        <div class="error" tal:content="structure out/errors/zakwaterowanie_inne" />               
+                    </div>
+
+                    <h4>3. Podaj nazwy hoteli, w których byłeś/łaś w ciągu ostatniego roku</h4>
+                    <div class="pad">
+                        <input class="float" id="ostatnie_hotele" name="ostatnie_hotele" type="text" 
+                               value="${out/form/ostatnie_hotele}"/>
+                        <div class="clear error" tal:content="structure out/errors/ostatnie_hotele" />
+                    </div>
+
+
+                    <h4>4. Ile razy w roku wyjeżdżasz w celach:</h4>
+                    <div class="pad">
+                        <label class="float align-right" for="ile_razy_turystycznie">turystycznych</label>
+                        <input class="float" id="ile_razy_turystycznie" name="ile_razy_turystycznie" type="text"
+                               style="width: 260px;"
+                               value="${out/form/ile_razy_turystycznie}"/>
+                        <div class="clear error" tal:content="structure out/errors/ile_razy_turystycznie" />
+
+                        <label class="float align-right" for="ile_razy_sluzbowo">służbowych</label>
+                        <input class="float" id="ile_razy_sluzbowo" name="ile_razy_sluzbowo" type="text" 
+                               style="width: 260px;"
+                               value="${out/form/ile_razy_sluzbowo}"/>
+                        <div class="clear error" tal:content="structure out/errors/ile_razy_sluzbowo" />
+                    </div>
+
+                    <h4>5. Skąd dowiedziałeś/łaś się o sieci hotelowej Focus?</h4>
+                    <div class="pad">
+                        <input class="float" id="skad_wiesz" name="skad_wiesz" type="text" 
+                               value="${out/form/skad_wiesz}"/>
+                        <div class="clear error" tal:content="structure out/errors/skad_wiesz" />
+                    </div>
+
+                    <h4>6. Czy nocowałeś już w hotelu sieci Focus?</h4>
+                    <div class="pad">
+                        <input id="p06-1" name="czy_nocowales" type="radio" value='nie'
+                               tal:attributes="checked php: out['form']['czy_nocowales'] == 'nie'" />
+                        <label for="p06-1">nie</label>
+                        <br/>
+                        <input id="p06-2" name="czy_nocowales" type="radio" value='tak'
+                               tal:attributes="checked php: out['form']['czy_nocowales'] == 'tak'" />
+                        <label for="p06-2">tak, nocowałem w hotelu: </label>                    
+                        <input id="czy_nocowales_gdzie" name="czy_nocowales_gdzie" type="text"
+                               value="${out/form/czy_nocowales_gdzie}"/>
+
+                        <div class="clear error" tal:content="structure out/errors/czy_nocowales" />
+                        <div class="clear error" tal:content="structure out/errors/czy_nocowales_gdzie" />
+                    </div>
+
+                    <h4>7. W którym mieście chciałbyś przetestować jeden z hoteli Focus w pierwszej kolejności?</h4>
+                    <div class="pad">
+                        <input id="p07-1" name="gdzie_testowac" type="radio" value='Gdańsk'
+                               tal:attributes="checked php: out['form']['gdzie_testowac'] == 'Gdańsk'" />
+                        <label for="p07-1">Gdańsk</label>
+                        <br/>
+                        <input id="p07-2" name="gdzie_testowac" type="radio" value='Szczecin'
+                               tal:attributes="checked php: out['form']['gdzie_testowac'] == 'Szczecin'" />
+                        <label for="p07-2">Szczecin</label>
+                        <br/>
+                        <input id="p07-3" name="gdzie_testowac" type="radio" value='Bydgoszcz'
+                               tal:attributes="checked php: out['form']['gdzie_testowac'] == 'Bydgoszcz'" />
+                        <label for="p07-3">Bydgoszcz</label>
+                        <br/>
+                        <input id="p07-4" name="gdzie_testowac" type="radio" value='Łódź'
+                               tal:attributes="checked php: out['form']['gdzie_testowac'] == 'Łódź'" />
+                        <label for="p07-4">Łódź</label>
+                        <br/>
+                        <input id="p07-5" name="gdzie_testowac" type="radio" value='Katowice/Chorzów'
+                               tal:attributes="checked php: out['form']['gdzie_testowac'] == 'Katowice/Chorzów'" />
+                        <label for="p07-5">Katowice/Chorzów</label>
+                        <br/>
+                        <input id="p07-6" name="gdzie_testowac" type="radio" value='Inowrocław'
+                               tal:attributes="checked php: out['form']['gdzie_testowac'] == 'Inowrocław'" />
+                        <label for="p07-6">Inowrocław</label>
+
+                        <div class="clear error" tal:content="structure out/errors/gdzie_testowac" />
+                    </div>
+
+                    <h4>8. Czy jesteś aktywny w Internecie?</h4>
+                    <div class="pad">
+                        <input id="p08-1" name="czy_aktywny" type="radio" value='nie'
+                               tal:attributes="checked php: out['form']['czy_aktywny'] == 'nie'" />
+                        <label for="p08-1">nie</label>
+                        <br/>
+                        <input id="p08-2" name="czy_aktywny" type="radio" value='tak'
+                               tal:attributes="checked php: out['form']['czy_aktywny'] == 'tak'" />
+                        <label for="p08-2">tak (wpisz poniżej w jakich miejscach): </label>                    
+                        <input id="czy_aktywny_gdzie" name="czy_aktywny_gdzie" type="text"
+                               value="${out/form/czy_aktywny_gdzie}"/>
+
+                        <div class="clear error" tal:content="structure out/errors/czy_aktywny" />
+                        <div class="clear error" tal:content="structure out/errors/czy_aktywny_gdzie" />
+                    </div>
+
+                    <h4>9. Opowiedz nam jakie są Twoje zainteresowania/pasje.</h4>
+                    <div class="pad">
+                        <textarea noresize="noresize" name="zainteresowania">${out/form/zainteresowania}</textarea>
+                        <div class="clear error" tal:content="structure out/errors/zainteresowania" />
+                    </div>
+
+                    <h4>10. W jakich miejscach się udzielasz, wyrażając swoje opinie, poglądy, zainteresowania? <br/>
+                        (podaj linki lub wpisz nazwy stron)</h4>
+                    <div class="pad">
+                        <textarea noresize="noresize" name="miejsca_aktywnosci">${out/form/miejsca_aktywnosci}</textarea>
+                        <div class="clear error" tal:content="structure out/errors/miejsca_aktywnosci" />
+                    </div>
+
+                    <h4>11. Jeśli tworzysz własnego bloga związanego z twoją pracą lub hobby, to podaj jego adres:</h4>
+                    <div class="pad">
+                        <input class="float" id="blog" name="blog" type="text" 
+                               value="${out/form/blog}"/>
+                        <div class="clear error" tal:content="structure out/errors/blog" />
+                    </div>
+
+                    <h4>12. Dlaczego, twoim zdaniem, jesteś dobrym kandydatem na Ambasadora marki Focus Hotel?</h4>
+                    <div class="pad">
+                        <textarea noresize="noresize" name="dlaczego_ambasador">${out/form/dlaczego_ambasador}</textarea>
+                        <div class="clear error" tal:content="structure out/errors/dlaczego_ambasador" />                    
+                    </div>
+
+                </fieldset>
+
+
+                <fieldset class="black-labels">
+                    <h3>Informacje ogólne</h3>
+                    <div class="pad">
+                        <label for="rok_urodzenia"><span>Rok urodzenia</span></label>
+                        <input class="float" id="rok_urodzenia" name="rok_urodzenia" type="text" value="${out/form/rok_urodzenia}"/>
+                        <div class="error margined" tal:content="structure out/errors/rok_urodzenia" />
+
+                        <label for="plec"><span>Płeć</span></label>
+                        <input class="float" id="plec" name="plec" type="text" value="${out/form/plec}"/>
+                        <div class="error margined" tal:content="structure out/errors/plec" />
+
+                        <label for="wyksztalcenie"><span>Wykształcenie</span></label>
+                        <input class="float" id="wyksztalcenie" name="wyksztalcenie" type="text" value="${out/form/wyksztalcenie}"/>
+                        <div class="error margined" tal:content="structure out/errors/wyksztalcenie" />                    
+
+                        <label for="wojewodztwo"><span>Województwo</span></label>
+                        <input class="float" id="wojewodztwo" name="wojewodztwo" type="text" value="${out/form/wojewodztwo}"/>
+                        <div class="error margined" tal:content="structure out/errors/wojewodztwo" />  
+
+                        <label for="adres"><span>Adres zamieszkania</span></label>
+                        <input class="float" id="adres" name="adres" type="text" value="${out/form/adres}"/>
+                        <div class="error margined" tal:content="structure out/errors/adres" /> 
+                    </div>
+
+                    <br/>
+                    <input id="zgoda" type="checkbox" name="zgoda" 
+                           tal:attributes="checked php: out['form']['zgoda']" />&nbsp;
+                    <p style="font-size: 10px; line-height: 1.2em; margin-left: 30px; margin-top: -20px; width: 700px;">
+                        <label style="font-weight: normal; line-height: 1.2em; display: inline;" for="zgoda">
+                            Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych, a w szczególności z przeprowadzeniem niniejszej akcji promocyjnej oraz na przesyłanie informacji przez Focus Hotels Sp. z o.o.o. oraz Agencję obsługującą Umbrella Marketing Group Grzegorz Osóbka z siedzibą w Warszawie, przy ul. Nowoursynowskiej 105B. Focus Hotels Sp. z o.o. oraz Umbrella Marketing Group Grzegorz Osóbka informują, że zgodnie z art. 24 ust. 1 pkt 3 i 4 ustawy z dnia 29 sierpnia 1997 r. o ochronie danych osobowych, podanie danych jest dobrowolne, a użytkownikowi przysługuje prawo dostępu do treści swoich danych oraz ich poprawiania.
+                        </label>
+                    <div class="error" tal:content="structure out/errors/zgoda" /> 
+                    </p>
+
+                    <!--input id="p13-1" name="plec" type="radio" value='kobieta'
+                           tal:attributes="checked php: out['form']['plec'] == 'kobieta'" />
+                    <label class="inline" for="p13-1">kobieta</label>
+                    <br/>
+                    <input id="p13-2" name="plec" type="radio" value='mężczyzna'
+                           tal:attributes="checked php: out['form']['plec'] == 'mężczyzna'" />
+                    <label class="inline" for="p13-2">mężczyzna</label>
+                    <br/>
+                    <div class="clear error" tal:content="structure out/errors/plec" />
+
+                    <label for="nazwisko"><span>Wykształcenie</span></label>
+                    <select class="float" id="wyksztalcenie" name="wyksztalcenie" type="text">
+                        <option value=""
+                                tal:attributes="selected php: out['form']['wyksztalcenie'] == ''"></option>
+                        <option value="podstawowe"
+                                tal:attributes="selected php: out['form']['wyksztalcenie'] == 'podstawowe'">podstawowe</option>
+                        <option value="zawodowe"
+                                tal:attributes="selected php: out['form']['wyksztalcenie'] == 'zawodowe'">zawodowe</option>
+                        <option value="średnie"
+                                tal:attributes="selected php: out['form']['wyksztalcenie'] == 'średnie'">średnie</option>
+                        <option value="wyższe"
+                                tal:attributes="selected php: out['form']['wyksztalcenie'] == 'wyższe'">wyższe</option>
+                    </select>
+                    <div class="error margined" tal:content="structure out/errors/wyksztalcenie" /-->
+
+                </fieldset>                
+
+                <button style="text-align: right; float: right;" class="submit" type="submit" />
+                <div class="clear"></div>
+            </form>
+
+
+        </div>
+    </tal:block>
+
+
+</tal:block>

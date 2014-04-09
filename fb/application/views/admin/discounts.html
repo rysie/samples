@@ -1,0 +1,59 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+            <h3 tal:condition="exists: discountsList"><a href="/${subpath}admin/discounts/create">Dodaj nowy rabat &raquo;</a></h3>
+            <h3 tal:condition="exists: discount"><a href="/${subpath}admin/discounts">Powróć do listy &raquo;</a></h3>
+        </div>
+    </tal:block>
+
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <!--
+               Wszystkie newsy: lista
+        -->
+
+        <tal:block tal:condition="exists: discountsList">
+            <h1>Lista rabatów</h1>
+            <table class="auto total">
+                <tr>
+                    <th style="width: 150px;">wartość zamówienia</th>
+                    <th style="width: 300px;">rabat</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr tal:repeat="discount discountsList">
+                    <td><a href="/${subpath}admin/discounts/edit/${discount/id}">${discount/amount}</a></td>
+                    <td tal:content="discount/percentage" />
+                    <td class="data">
+                        <a href="/${subpath}admin/discounts/edit/${discount/id}">edycja</a><br/><br/>
+                        <a class="deleteItem" href="/${subpath}admin/discounts/delete/${discount/id}">usuń wpis</a>
+                    </td>
+                </tr>
+            </table>
+        </tal:block>
+
+
+        <!--
+            Jeden news: edycja
+        -->
+
+        <tal:block tal:condition="exists: discount">
+            <h1>Rabaty: edycja</h1>
+
+            <form id="update" action="/${subpath}admin/discounts/update/${discount/id}" method="POST" enctype="multipart/form-data">
+                <h3>Wartość zamówienia</h3>
+                <input type="text" name="amount" tal:attributes="value discount/amount" />
+                <h3>Rabat w %</h3>
+                <input type="text" name="percentage" tal:attributes="value discount/percentage" />
+                    <div class="clear" />
+                    <div id="buttons_OKCANCEL" />
+            </form>
+        </tal:block>
+
+    </tal:block>
+</tal:block>
+
+
+
+

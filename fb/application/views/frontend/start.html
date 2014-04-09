@@ -1,0 +1,28 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+
+    <tal:block metal:fill-slot="content">
+        <div id="page_1">
+            <h1>Często podróżujesz po Polsce?</h1>
+            <p class="intro">
+                Cenisz sobie komfort pracy w hotelu jak i wypoczynek?<br/>
+                Testuj nasze hotele, opiniuj, dziel się wrażeniami!
+            </p>
+            <div class="bottom">
+                <div class="noFan" tal:condition="php: out['likesUs'] == false">
+                    <p class="cta"><b>${out/user/name}</b>,<br/>polub nasz profil i...<br/></p>
+                    <div class="fb-like" data-href="${out/profileUrl}" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
+                </div>
+                <div>
+                    <a class="${php: out['likesUs']? '': 'isFan'}" 
+                       href="/${subpath}info"><img src="images/btn_start.jpg" />
+                    </a>
+                    <img tal:condition="php: out['likesUs'] == false" 
+                         class="imgNoFan ${php: out['likesUs']? '': 'noFan'}" 
+                         src="images/btn_start.jpg" />
+                </div>
+            </div>
+        </div>
+    </tal:block>
+
+
+</tal:block>

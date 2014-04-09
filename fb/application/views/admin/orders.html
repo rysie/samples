@@ -1,0 +1,140 @@
+<tal:block metal:use-macro="_layout.html/glowny">
+    <tal:block metal:fill-slot="sidebar">
+        <div class="bg normal">
+            <input type="hidden" id="today" tal:attributes="value php: date('Y-m-d');" />
+            <div tal:condition="exists: years" id="years">
+                <h3>Rok:</h3>
+                <ul>
+                    <li tal:repeat="year years"><a href="/${subpath}admin/orders/index/${year}">${year}</a></li>
+                </ul>
+            </div>
+            <h3 tal:condition="exists: single_order"><a href="/${subpath}admin/orders">Powróć do listy &raquo;</a></h3>
+        </div>
+    </tal:block>
+
+
+    <tal:block metal:fill-slot="mcontent">
+        <h2 tal:condition="exists: out/message" tal:content="structure out/message"/>
+
+        <!--
+               Wszystkie zamówienia: lista
+        -->
+
+        <tal:block tal:condition="exists: orders_list">
+            <h1>Złożone zamówienia - rok ${year}</h1>
+            <table class="auto total">
+                <tr>
+                    <th style="width: 35px;">id</th>
+                    <th style="width: 75px;">data</th>
+                    <th style="">zamawiający</th>
+                    <th style="width: 80px;">kwota (z VAT)</th>
+                    <th style="width: 80px;">rabat</th>
+                    <th style="width: 80px;">do zapłaty</th>
+                    <th></th>
+                </tr>
+                <tal:block tal:repeat="order orders_list">
+                    <tr>
+                        <td>${order/order_number}</td>
+                        <td class="data">${order/datetime}</td>
+                        <td>${order/address/invoice/company} (${order/address/invoice/name})</td>
+                        <td>${order/totals/total_tax}</td>
+                        <td>${order/totals/total_discount}</td>
+                        <td>${order/totals/to_pay_tax}</td>
+                        <td class="data">
+                            <a href="/${subpath}admin/orders/details/${order/order_number}">szczegóły&nbsp;&raquo;</a>
+                            <br/><br/>
+                            <a class="deleteItem" href="/${subpath}admin/orders/usun_zamowienie/${order/order_number}">usuń&nbsp;&raquo;</a>
+                        </td>
+                    </tr>
+                </tal:block>
+            </table>
+        </tal:block>
+
+
+        <!--
+            Jedno zamówienia: podgląd
+        -->
+
+        <tal:block id="metryczka" tal:condition="exists: single_order">
+            <div class="details">
+                <div style="font-size: 7pt; font-family: Arial; margin: 10px 0;">Data złożenia zamówienia: <b>${single_order/datetime}</b></div>
+                <h2>Zamawiający</h2>
+                <p style="color: red">UWAGA! Poniższe dane są z dnia złożenia zamówienia. Użytkownik mógł w międzyczasie zmienić dane.</p>
+                <table>
+                    <tr>
+                        <td style="vertical-align: top; width: 280px;">
+                            <p><b>Dane wysyłki:</b></p>
+                            <p>${single_order/address/send/company}</p>
+                            <p>${single_order/address/send/name}</p>
+                            <p>${single_order/address/send/address}</p>
+                            <p>${single_order/address/send/zip} ${single_order/address/send/locality}</p>
+                            <p>${single_order/address/send/country}</p>
+                            <p tal:condition="php: array_key_exists('phone', single_order['address']['send'])">tel. ${single_order/address/send/phone}</p>
+                            <p>${single_order/user_email}</p>
+                        </td>
+                        <td style="vertical-align: top; width: 280px;">
+                            <p><b>Dane firmy</b></p>
+                            <p>${single_order/address/invoice/company}</p>
+                            <p>${single_order/address/invoice/name}</p>
+                            <p>${single_order/address/invoice/address}</p>
+                            <p>${single_order/address/invoice/zip} ${single_order/address/invoice/locality}</p>
+                            <p>${single_order/address/invoice/country}</p>
+                            <p>NIP ${single_order/address/invoice/nip}</p>                                
+                        </td>
+                    </tr>
+                </table>
+                <div style="height: 32px"></div>
+                <h2>Zamówienie</h2>
+                <p style="color: red">UWAGA! Poniższe dane są z dnia złożenia zamówienia. Jeśli zmienił się cennik, dane nie będą aktualne.</p>
+                <table class="orders_list" cellspacing="2" cellpadding="6">
+                    <tr>
+                        <th>FV/paragon</th>
+                        <th>produkt</th>
+                        <th>szt.</th>
+                        <th>cena&nbsp;netto</th>
+                        <th>cena&nbsp;brutto</th>
+                        <th>wartość&nbsp;netto</th>
+                        <th>wartość&nbsp;brutto</th>                
+                    </tr>
+                    <tr tal:repeat="item single_order/details">
+                        <td class="bordered">
+                            <span style="color: #800000" tal:condition="php: item['invoice'] == 0">paragon</span>
+                            <span style="color: #008000" tal:condition="php: item['invoice'] == 1">faktura</span>
+                        </td>
+                        <td class="bordered" style="">${item/product_name}</td>
+                        <td class="bordered" style="text-align: right">${item/qty}</td>
+                        <td class="bordered" style="text-align: right">${item/price}</td>
+                        <td class="bordered" style="text-align: right">${item/price_tax}</td>
+                        <td class="bordered" style="text-align: right">${item/total}</td>
+                        <td class="bordered" style="text-align: right">${item/total_tax}</td>
+                    </tr>
+                    <tr>
+                        <td class="bordered" style="background: #d0d0d0" colspan="5">
+                            suma
+                        </td>
+                        <td class="bordered" style="background: #d0d0d0; text-align: right">${single_order/totals/total}</td>
+                        <td class="bordered" style="background: #d0d0d0; text-align: right">${single_order/totals/total_tax}</td>
+                    </tr>
+                    <tr>
+                        <td class="bordered" style="text-align: right" colspan="5">RABAT</td>
+                        <td class="bordered" style="text-align: right">-${single_order/totals/total_discount}</td>
+                        <td class="bordered" style="text-align: right">-${single_order/totals/total_discount_tax}</td>
+                    </tr>    
+                    <tr>
+                        <td class="bordered" style="background: #900000; text-align: right; color: white" colspan="5">DO ZAPŁATY</td>
+                        <td class="bordered" style="background: #900000; text-align: right; color: white">${single_order/totals/to_pay}</td>
+                        <td class="bordered" style="background: #900000; text-align: right; color: white">${single_order/totals/to_pay_tax}</td>
+                    </tr>            
+                </table>
+                <h2>Wiadomość dla sprzedawcy</h2>
+                <p tal:condition="php: strlen(single_order['message']) > 1">${single_order/message}</p>
+                <p tal:condition="php: strlen(single_order['message']) <= 1">--- brak ---</p>
+            </div>
+        </tal:block>
+
+    </tal:block>
+</tal:block>
+
+
+
+
