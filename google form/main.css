@@ -1,0 +1,176 @@
+/* --------------------------
+        google form enhancements
+        plus transitions
+   --------------------------
+*/
+.csstransitions .page-header .container{
+    opacity:0;
+
+    -webkit-transform:translateY(-70px);
+    -moz-transform:translateY(-70px);
+    -o-transform:translateY(-70px);
+    -ms-transform:translateY(-70px);
+    transform:translateY(-70px);
+
+    -webkit-transition:1s .5s;
+    -moz-transition:1s .5s;
+    -o-transition:1s .5s;
+    -ms-transition:1s .5s;
+    transition:1s .5s;
+}
+.csstransitions .page-header.init .container{
+    opacity:1;
+    -webkit-transform:none;
+    -moz-transform:none;
+    -o-transform:none;-ms-transform:none;
+    transform:none;
+}
+.page-footer{padding:40px 0 10px;background:#192026;text-align:center;font-size:13px;color:#454a4f}
+.page-footer .rules {
+    margin-top: 42px;
+}
+.page-footer .rules a {
+    color: #909090;
+}
+.page-footer .name{text-transform:uppercase}
+.hero{-webkit-box-sizing:border-box;
+      -moz-box-sizing:border-box;
+      box-sizing:border-box;
+      height:725px;
+      overflow:hidden;
+      padding:7px 0 10px;
+      position:relative;
+      background:#0e1317;
+      text-align:center;
+      color:#fff}
+.hero {
+    border-bottom: 2px solid black;
+}
+.hero .bg{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    background:#0e1317 url(../img/shotgun-bg.jpg) no-repeat center bottom;
+}
+.hero .container{position:relative}
+.hero h1{color:#ff7200; text-transform:uppercase;font-size:152px;font-family:"purista-web",sans-serif}
+.hero h1 span{color: white; font-size:52px; display: inline-block; text-align: left;}
+.hero h2{margin-top:-3px;font-weight:600;font-size:30px;line-height:1;font-family:"purista-web",sans-serif;color:#ff7200}
+.hero ::selection{background:#fff;color:#0e1317}
+.hero ::-moz-selection{background:#fff;color:#0e1317}
+.csstransitions .hero .bg {
+    opacity: 0;
+    -webkit-transform:translateX(-40px);
+    -moz-transform:translateX(-40px);
+    -o-transform:translateX(-40px);
+    -ms-transform:translateX(-40px);
+    transform:translateX(-40px);
+    -webkit-transition:1.5s;
+    -moz-transition:1.5s;
+    -o-transition:1.5s;
+    -ms-transition:1.5s;
+    transition:1.5s;
+    -webkit-transition-delay:.75s;
+    -moz-transition-delay:.75s;
+    -o-transition-delay:.75s;
+    transition-delay:.75s;
+}
+.csstransitions .hero .cta {
+    opacity:0;
+    -webkit-transition:.75s;
+    -moz-transition:.75s;
+    -o-transition:.75s;
+    -ms-transition:.75s;
+    transition:.75s;
+    -webkit-transition-delay:1.25s;
+    -moz-transition-delay:1.25s;
+    -o-transition-delay:1.25s;
+    transition-delay:1.25s;
+}
+.csstransitions .hero.init .bg,
+.csstransitions .hero.init .cta {
+    opacity:1;
+    -webkit-transform:none;
+    -moz-transform:none;
+    -o-transform:none;
+    -ms-transform:none;
+    transform:none;
+}
+
+.form {
+
+}
+
+.form .container {
+    width: 940px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.form .container .fields {
+    text-align: left;
+    width: 450px;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    border: 1px solid #909090;
+    border-radius: 0 0 8px 8px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+.form .container .fields .top {
+    text-align: center;
+    width: 100%;
+    font-size: 18pt;
+    text-transform: uppercase;
+    margin-top: -20px;
+}
+
+.form .container .fields .top .color {
+    color: #ff7200;
+    font-size: 32pt;
+}
+
+.form .container .fields .fset {
+    margin: 8px 0;
+}
+
+.form .container .fields .fset label {
+    width: 160px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.form .container .fields .fset .required-message {
+    text-align: right;
+	color: #ff5050;
+	font-size: 7pt;
+	display: none;
+}
+
+
+.form .container .fields .fset input[type="text"], 
+.form .container .fields .fset select {
+    width: 220px;
+}
+
+.form .container .fields .fset input.submit {
+    margin-left: 280px;
+    border: 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: all 0.15s ease 0s;
+}
+
+.hero .cta .button:hover{background:#fff;color:#ff7200}
+
+/*
+    -----
+    end of enhancements
+    -----
+*/
